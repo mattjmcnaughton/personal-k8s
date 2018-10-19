@@ -1,0 +1,13 @@
+provider "aws" {
+  region = "us-west-2"
+}
+
+terraform {
+  backend "s3" {
+    # @TODO Use the bucket in which you want to store your terraform state.
+    bucket = "YOUR_BUCKET_FOR_STORING_TERRAFORM_STATE",
+    key = "kops-aws-configuration",
+    region = "us-west-2",
+    encrypt = true
+  }
+}

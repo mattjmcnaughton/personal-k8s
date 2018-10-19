@@ -1,0 +1,22 @@
+---
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: blog
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: blog
+  template:
+    metadata:
+      labels:
+        app: blog
+    spec:
+      containers:
+      - name: blog
+        image: docker.io/mattjmcnaughton/blog:4c5d3452f227ddbb13bd1ea70ec23ebaa91ed46d
+        ports:
+        - name: http
+          containerPort: 80
+          protocol: TCP
