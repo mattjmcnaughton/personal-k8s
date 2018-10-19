@@ -25,6 +25,12 @@ decided to create my own Kubernetes cluster.
 
 ## What's coming up?
 
-Please see this project's
-[Roadmap](https://github.com/mattjmcnaughton/personal-k8s/projects/1) for a
-prioritized list of upcoming projects.
+Currently, I use [Github
+Issues](https://github.com/mattjmcnaughton/personal-k8s/issues)
+to aggregate tickets and [Github
+Projects](https://github.com/mattjmcnaughton/personal-k8s/projects/1)
+to prioritize and track in progress work.
+
+For all issues, define the **Issue**, **Implementation**, and **Definition of
+Done**. The definition of done should almost always include writing a tutorial
+blog post.
