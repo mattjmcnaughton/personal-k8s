@@ -15,10 +15,10 @@ their current status.
 
 - `blog (deployed, guiding-principles-not-applied)`: We deploy [my
   blog](http://mattjmcnaughton.com) via Kubernetes.
-- `prometheus-operator (not-deployed, guiding-principles-not-applied)`: We use
+- `prometheus-operator (deployed, guiding-principles-not-applied)`: We use
   [CoreOS Prometheus Operator](https://coreos.com/operators/prometheus/docs/latest/) to deploy Prometheus
   instances.
-- `prometheus (not-deployed, guiding-principles-not-applied)`: We deploy
+- `prometheus (deployed, guiding-principles-not-applied)`: We deploy
   [Prometheus](https://prometheus.io) for monitoring and alerting.
 
 ## Guiding principles
@@ -114,6 +114,14 @@ deployed.
 - @TODO(mattjmcnaughton) Container image security scanning should be a component
   of CI. I'm not exactly sure what existing technologies there are which support
   this.
+- All external applications should use encrypted communication on the public
+  internet (i.e. https) and have an authentication mechanism.
+
+### Persistent Storage
+
+- All applications running the production environment should use EBS for persistent storage.
+  @TODO(mattjmcnaughton) Explore the exact pattern we should use. My guess is it
+  will involve `StorageClasses` and `PersistentVolumeClaims`.
 
 ### Specifying Dependencies
 
