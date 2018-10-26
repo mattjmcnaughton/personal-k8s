@@ -1,11 +1,20 @@
 ---
+# This manifest declares that we want a Prometheus cluster deployed via the
+# Prometheus operator. Note, in order to use the `Prometheus` CRD, we must first
+# deploy CoreOS's Prometheus Operator.
 apiVersion: monitoring.coreos.com/v1
 kind: Prometheus
 metadata:
   name: prometheus
 spec:
+  # Our Prometheus cluster should have at least 2 replicas. Under the hood,
+  # the Prometheus Operator creates a stateful set. So we will have `#replicas`
+  # pods in our stateful set.
   replicas: 2
   serviceAccountName: prometheus
+  # ServiceMonitors specify how the Prometheus cluster should scrape metrics. We
+  # attach `ServiceMonitors` we've defined to this Prometheus cluster using the
+  # `serviceMonitorSelector`.
   serviceMonitorSelector:
     matchLabels:
       app: blog

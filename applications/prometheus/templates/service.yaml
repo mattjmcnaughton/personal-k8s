@@ -1,13 +1,16 @@
 ---
+# This manifest declares the Service which allows us to access our Prometheus
+# cluster (either internally or externally).
 apiVersion: v1
 kind: Service
 metadata:
   name: prometheus
 spec:
-  # We temporarily use a ClusterIP, because I don't want this externally used
-  # on the internet until we have some form of authentication. We can't have
+  # @TODO(mattjmcnaughton) We temporarily use a ClusterIP, because we don't want this externally accessible
+  # from the internet until we have some form of authentication. We can't have
   # some form of meaningful authentication until we have https. We can access it
-  # from our local machine using port forwarding.
+  # from our local machine using port forwarding. Once we have `https` and
+  # authentication, we can make it a `LoadBalancer`.
   type: ClusterIP
   ports:
   - name: web
@@ -15,4 +18,6 @@ spec:
     protocol: TCP
     targetPort: web
   selector:
+    # The CoreOS Prometheus operator assigns the `prometheus=prometheus` label
+    # to all pods in the StatefulSet it creates for the Prometheus cluster.
     prometheus: prometheus
