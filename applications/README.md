@@ -20,6 +20,9 @@ their current status.
   instances.
 - `prometheus (deployed, guiding-principles-not-applied)`: We deploy
   [Prometheus](https://prometheus.io) for monitoring and alerting.
+- `grafana (deployed, guiding-principles-not-applied)`: We deploy
+  [Grafana](https://grafana.org) for dashboards.
+
 
 ## Guiding principles
 
@@ -111,6 +114,7 @@ deployed.
 - Each application should use a `NetworkPolicy` to limit access to only intended
   other pods. By default, only pods in the global namespace (i.e. prometheus) should be
   allowed to access. At most, only pods within the namespace and global pods should be allowed to access.
+- @TODO(mattjmcnaughton) Add something around PodSecurity policy.
 - @TODO(mattjmcnaughton) Container image security scanning should be a component
   of CI. I'm not exactly sure what existing technologies there are which support
   this.
