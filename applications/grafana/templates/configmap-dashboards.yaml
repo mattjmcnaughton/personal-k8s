@@ -4,7 +4,7 @@ kind: ConfigMap
 metadata:
   name: grafana-dashboards
 data:
-  prometheus-gitops-demo.json: |-
+  blog-slo.json: |-
     {
       "annotations": {
         "list": [
@@ -19,7 +19,7 @@ data:
           }
         ]
       },
-      "description": "A demo of using Gitops to create dashboard reading from Prometheus.",
+      "description": "Monitoring around SLO",
       "editable": true,
       "gnetId": null,
       "graphTooltip": 0,
@@ -32,12 +32,106 @@ data:
           "dashLength": 10,
           "dashes": false,
           "datasource": "Prometheus",
-          "description": "Overview of response counts.",
+          "description": "Graph of 99p latency",
           "fill": 1,
           "gridPos": {
             "h": 9,
             "w": 12,
             "x": 0,
+            "y": 0
+          },
+          "id": 4,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "histogram_quantile(0.99, sum(rate(caddy_http_request_duration_seconds_bucket[1h])) by (le))",
+              "format": "time_series",
+              "intervalFactor": 1,
+              "legendFormat": "99p latency",
+              "refId": "A"
+            }
+          ],
+          "thresholds": [
+            {
+              "colorMode": "critical",
+              "fill": true,
+              "line": true,
+              "op": "gt",
+              "value": 1,
+              "yaxis": "left"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Latency",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "s",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Prometheus",
+          "description": "Ratio of successful response counts.",
+          "fill": 1,
+          "gridPos": {
+            "h": 9,
+            "w": 12,
+            "x": 12,
             "y": 0
           },
           "id": 2,
@@ -64,22 +158,26 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(caddy_http_response_status_count_total{status=\"200\"})",
+              "expr": "sum(rate(caddy_http_response_status_count_total{service=\"blog\",status!~\"5..\"}[1h])) / sum(rate(caddy_http_response_status_count_total{service=\"blog\"}[1h]))",
               "format": "time_series",
               "intervalFactor": 1,
+              "legendFormat": "Ratio Successful Requests",
               "refId": "A"
-            },
-            {
-              "expr": "",
-              "format": "time_series",
-              "intervalFactor": 1,
-              "refId": "B"
             }
           ],
-          "thresholds": [],
+          "thresholds": [
+            {
+              "colorMode": "critical",
+              "fill": false,
+              "line": true,
+              "op": "lt",
+              "value": 0.99,
+              "yaxis": "left"
+            }
+          ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "HTTP Response Count Status",
+          "title": "Availability",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -98,7 +196,7 @@ data:
               "format": "short",
               "label": null,
               "logBase": 1,
-              "max": null,
+              "max": "1.0",
               "min": null,
               "show": true
             },
@@ -117,17 +215,19 @@ data:
           }
         }
       ],
+      "refresh": false,
       "schemaVersion": 16,
       "style": "dark",
       "tags": [
-        "prometheus"
+        "prometheus",
+        "slo"
       ],
       "templating": {
         "list": []
       },
       "time": {
-        "from": "now-6h",
-        "to": "now"
+        "from": "now/d",
+        "to": "now/d"
       },
       "timepicker": {
         "refresh_intervals": [
@@ -155,7 +255,7 @@ data:
         ]
       },
       "timezone": "",
-      "title": "prometheus-gitops-demo",
+      "title": "mattjmcnaughton.com SLO",
       "uid": "7MRIBiaik",
       "version": 2
     }
