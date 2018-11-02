@@ -1,9 +1,13 @@
 ---
+# This manifest declares the ConfigMap containing the configuration files for
+# our different Grafana dashboards.
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: grafana-dashboards
 data:
+  # This configuration file is responsible for the dashboard visualizing our
+  # adherence with our blog's SLO.
   blog-slo.json: |-
     {
       "annotations": {

@@ -1,4 +1,5 @@
 ---
+# This manifest declares the Service for accessing our Grafana application.
 apiVersion: v1
 kind: Service
 metadata:
@@ -6,6 +7,11 @@ metadata:
   labels:
     app: grafana
 spec:
+  # @TODO(mattjmcnaughton) We temporarily use a ClusterIP, because we don't want this externally accessible
+  # from the internet until we have some form of authentication. We can't have
+  # some form of meaningful authentication until we have https. We can access it
+  # from our local machine using port forwarding. Once we have `https` and
+  # authentication, we can make it a `LoadBalancer`.
   type: ClusterIP
   selector:
     app: grafana

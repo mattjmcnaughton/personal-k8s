@@ -1,15 +1,24 @@
 ---
+# This manifest declares the ConfigMap containing Grafana's static configuration
+# files.
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: grafana-config
 data:
+  # Responsible for the Grafana's base configuration.
   grafana.ini: |-
     instance_name = grafana
 
     [log]
     mode = console
 
+  # Responsible for configuring Prometheus as the only data source for Grafana.
+  # We access our prometheus cluster via the DNS name Kubernetes creates for
+  # internally accessing the `prometheus` service.
+  #
+  # Note, if we add authentication to Prometheus, we may need to update this
+  # configuration with the authentication.
   datasource.yaml: |-
     apiVersion: 1
 
@@ -24,6 +33,10 @@ data:
         url: http://prometheus:9090
         editable: false
 
+  # Responsible for telling Grafana to load dashboards from a given directory on
+  # boot. Note, this configuration file doesn't actually include configuration
+  # for specific dashboards. `configmap-dashboards.yaml` contains that
+  # configuration.
   dashboards.yaml: |-
     apiVersion: 1
 
