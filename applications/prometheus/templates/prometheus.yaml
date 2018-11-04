@@ -11,6 +11,9 @@ spec:
   # the Prometheus Operator creates a stateful set. So we will have `#replicas`
   # pods in our stateful set.
   replicas: 2
+  # Retain data for 90 days. Note, we may need to decrease these if we find it
+  # requires too much storage.
+  retention: "90d"
   serviceAccountName: prometheus
   # ServiceMonitors specify how the Prometheus cluster should scrape metrics. We
   # attach `ServiceMonitors` we've defined to this Prometheus cluster using the
@@ -21,3 +24,12 @@ spec:
   resources:
     requests:
       memory: 400Mi
+  # @TODO(mattjmcnaughton) Determine a way to make this work when using
+  # Minikube. I may need to wait until I'm templating this via a Helm chart.
+  storage:
+    volumeClaimTemplate:
+      spec:
+        storageClassName: prometheus-ssd
+        resources:
+          requests:
+            storage: 20Gi

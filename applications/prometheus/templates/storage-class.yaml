@@ -1,0 +1,11 @@
+---
+# This manifest declares the StorageClass from which our Prometheus instance
+# claims persistent storage. Note, we may eventually want to have a generic
+# claim for using ssds that we can use across our entire cluster.
+apiVersion: storage.k8s.io/v1beta1
+kind: StorageClass
+metadata:
+  name: prometheus-ssd
+provisioner: kubernetes.io/aws-ebs
+parameters:
+  type: gp2
