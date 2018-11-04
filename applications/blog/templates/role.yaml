@@ -1,0 +1,13 @@
+---
+# This manifest declares the Role under which our Blog pod will run.
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: blog
+# Our blog application never needs to access the Kubernetes API, so it has no
+# permissions.
+#
+# @TODO(mattjmcnaughton) Long term, should we create (or utilize if it already
+# exists) a single role specifying the ServiceAccount should not interact with
+# the Kubernetes API.
+rules: []

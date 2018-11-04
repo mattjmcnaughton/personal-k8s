@@ -13,6 +13,7 @@ spec:
       labels:
         app: blog
     spec:
+      serviceAccountName: blog
       containers:
       - name: blog
         image: docker.io/mattjmcnaughton/blog:1db99ae5498adce0d3961fbce63dd967b9b3f6a2
