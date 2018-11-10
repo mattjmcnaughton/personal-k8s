@@ -1,0 +1,39 @@
+# Alertmanager's configuration file:
+# https://prometheus.io/docs/alerting/configuration/
+#
+# At a high level, we send critical alerts to Opsgenie and do nothing all others.
+
+global:
+  resolve_timeout: 5m
+  # IMPT: This file is checked into source control, so do not hard code any
+  # secrets. Rather, specify the environment variables and use `envsubst` as
+  # described in the README.
+  opsgenie_api_key: ${OPSGENIE_API_KEY}
+
+# Specify how we'll handle specific alerts based on their labels.
+route:
+  # Alerts should be independent across services.
+  group_by: ['alertname', 'service']
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 12h
+  # The default destination for unmatched alerts its `null` (i.e. do nothing).
+  receiver: 'null'
+
+  # Specify the more specific routing subtree.
+  routes:
+  # For alerts with the `severity=critical` label, send them to Opsgenie.
+  - match_re:
+      severity: critical
+    receiver: opsgenie
+
+# Specify the different options for handling alerts.
+receivers:
+# The `null` receiver does nothing with an alert.
+- name: 'null'
+# The `opsgenie` receiver sends the alert to Opsgenie. Currently this defaults
+# to the `personal-k8s` "on-call" rotation. We can think about having a per
+# application "on-call" rotations, but for now that seems too heavyweight.
+- name: 'opsgenie'
+  opsgenie_configs:
+  - priority: P1

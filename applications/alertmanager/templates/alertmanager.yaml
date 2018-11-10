@@ -1,0 +1,13 @@
+---
+# This manifest declares that we want an Alertmanager cluster deployed via the
+# Prometheus operator. Note, in order to use the `Alertmanager` CRD, we must
+# first deploy CoreOS's Prometheus Operator.
+apiVersion: monitoring.coreos.com/v1
+kind: Alertmanager
+metadata:
+  name: alertmanager
+spec:
+  # Our Alertmanager should have at least two replicas so that its high
+  # availability.
+  replicas: 2
+  serviceAccountName: alertmanager

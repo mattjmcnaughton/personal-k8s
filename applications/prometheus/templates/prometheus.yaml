@@ -20,7 +20,22 @@ spec:
   # `serviceMonitorSelector`.
   serviceMonitorSelector:
     matchLabels:
-      app: blog
+      role: service-monitor
+  # PrometheusRules specify the rules under which Prometheus should fire alerts
+  # (which are handeled by AlertManager). We attach `PrometheusRules` to our
+  # `Prometheus` instance via the `ruleSelector`.
+  ruleSelector:
+    matchLabels:
+      role: alert-rules
+  # Configure our Prometheus instance to send alerts to the `alertmanager`
+  # service.
+  alerting:
+    alertmanagers:
+    # @TODO(mattjmcnaughton) We'll want to update/template this namespace once
+    # we being making more advanced uses of namespaces.
+    - namespace: default
+      name: alertmanager
+      port: web
   resources:
     requests:
       memory: 400Mi

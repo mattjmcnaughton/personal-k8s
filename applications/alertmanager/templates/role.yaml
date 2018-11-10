@@ -1,0 +1,10 @@
+---
+# This manifest declares the Role under which our Alertmanager pods will run.
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: alertmanager
+# @TODO(mattjmcnaughton) Long term, should we create (or utilize if it already
+# exists) a single role specifying the ServiceAccount should not interact with
+# the Kubernetes API.
+rules: []
