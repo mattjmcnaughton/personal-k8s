@@ -27,6 +27,7 @@ data:
       "editable": true,
       "gnetId": null,
       "graphTooltip": 0,
+      "id": 1,
       "links": [],
       "panels": [
         {
@@ -35,7 +36,7 @@ data:
           "dashLength": 10,
           "dashes": false,
           "datasource": "Prometheus",
-          "description": "Burndown Chart for Availability",
+          "description": "Graph of 99p latency",
           "fill": 1,
           "gridPos": {
             "h": 9,
@@ -43,7 +44,7 @@ data:
             "x": 0,
             "y": 0
           },
-          "id": 6,
+          "id": 4,
           "legend": {
             "avg": false,
             "current": false,
@@ -67,27 +68,11 @@ data:
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum by(service)(increase(caddy_http_response_status_count_total{service=\"blog\"}[7d])) * .01",
+              "expr": "histogram_quantile(0.99, sum(rate(caddy_http_request_duration_seconds_bucket[1h])) by (le))",
               "format": "time_series",
-              "hide": true,
               "intervalFactor": 1,
-              "legendFormat": "total_allowed_errors",
+              "legendFormat": "99p latency",
               "refId": "A"
-            },
-            {
-              "expr": "sum by(service)(increase(caddy_http_response_status_count_total{service=\"blog\", status=~\"5..\"}[7d]))",
-              "format": "time_series",
-              "hide": true,
-              "intervalFactor": 1,
-              "legendFormat": "actual_errors",
-              "refId": "B"
-            },
-            {
-              "expr": "(sum by(service)(increase(caddy_http_response_status_count_total{service=\"blog\"}[7d])) * (30 / 7) * .01) - (sum by(service)(increase(caddy_http_response_status_count_total{service=\"blog\", status=~\"5..\"}[7d])))",
-              "format": "time_series",
-              "intervalFactor": 1,
-              "legendFormat": "error_burndown",
-              "refId": "C"
             }
           ],
           "thresholds": [
@@ -95,14 +80,14 @@ data:
               "colorMode": "critical",
               "fill": true,
               "line": true,
-              "op": "lt",
-              "value": 0,
+              "op": "gt",
+              "value": 1,
               "yaxis": "left"
             }
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "[WIP] Availability Burndown",
+          "title": "Latency",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -118,7 +103,7 @@ data:
           },
           "yaxes": [
             {
-              "format": "short",
+              "format": "s",
               "label": null,
               "logBase": 1,
               "max": null,
@@ -216,100 +201,6 @@ data:
               "label": null,
               "logBase": 1,
               "max": "1.0",
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": "Prometheus",
-          "description": "Graph of 99p latency",
-          "fill": 1,
-          "gridPos": {
-            "h": 9,
-            "w": 12,
-            "x": 0,
-            "y": 9
-          },
-          "id": 4,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "expr": "histogram_quantile(0.99, sum(rate(caddy_http_request_duration_seconds_bucket[1h])) by (le))",
-              "format": "time_series",
-              "intervalFactor": 1,
-              "legendFormat": "99p latency",
-              "refId": "A"
-            }
-          ],
-          "thresholds": [
-            {
-              "colorMode": "critical",
-              "fill": true,
-              "line": true,
-              "op": "gt",
-              "value": 1,
-              "yaxis": "left"
-            }
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Latency",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "s",
-              "label": null,
-              "logBase": 1,
-              "max": null,
               "min": null,
               "show": true
             },
