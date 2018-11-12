@@ -9,6 +9,9 @@ metadata:
   name: blog
   labels:
     app: blog
+    # Prometheus searches for any ServiceMonitor with the `role=service-monitor`
+    # label.
+    role: service-monitor
 spec:
   selector:
     # Scrape metrics for all pods with the `app=blog` label.

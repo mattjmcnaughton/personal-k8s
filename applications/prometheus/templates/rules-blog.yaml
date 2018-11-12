@@ -1,0 +1,43 @@
+---
+# This manifest defines the PrometheusRules specific to our blog that we'll use
+# for monitoring/alerting for mattjmcnaughton.com. Each rule should be
+# self-explanatory, but we utilize the following conventions:
+#
+# - `severity=critical` indicates we should raise an alert via Opsgenie.
+# - 15m is the default `for`. We may refine this value over time.
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: blog
+  labels:
+    app: blog
+    # Prometheus searches for any PrometheusRules with the `role=alert-rules`
+    # label.
+    role: alert-rules
+spec:
+  groups:
+  - name: blog.rules
+    rules:
+      - alert: BlogDown
+        annotations:
+          message: 'Unable to scrape metrics for blog. Is blog down?'
+        expr: 'absent(up{service="blog"}) == 1'
+        # Make `for` more aggressive, because there's less chance of this
+        # correcting itself.
+        for: 5m
+        labels:
+          severity: critical
+      - alert: SLOLatencyFailure
+        annotations:
+          message: 'Violating SLO that 99% latency is < 1s'
+        expr: 'histogram_quantile(0.99, sum(rate(caddy_http_request_duration_seconds_bucket{service="blog"}[1h])) by (le)) > 1'
+        for: 15m
+        labels:
+          severity: critical
+      - alert: SLOAvailabilityFailure
+        annotations:
+          message: 'Violating SLO that 99% of requests are successful'
+        expr: 'sum(rate(caddy_http_response_status_count_total{service="blog",status!~"5.."}[1h])) / sum(rate(caddy_http_response_status_count_total{service="blog"}[1h])) < .99'
+        for: 15m
+        labels:
+          severity: critical

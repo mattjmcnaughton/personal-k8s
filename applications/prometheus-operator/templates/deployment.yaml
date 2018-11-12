@@ -16,7 +16,9 @@ spec:
       - args:
         - --kubelet-service=kube-system/kubelet
         - --config-reloader-image=quay.io/coreos/configmap-reload:v0.0.1
-        image: quay.io/coreos/prometheus-operator:v0.17.0
+        # We know that certain PrometheusRule operations fail with 0.17 and
+        # succeed with 0.24, so use at least 0.24.
+        image: quay.io/coreos/prometheus-operator:v0.24.0
         name: prometheus-operator
         ports:
         - containerPort: 8080

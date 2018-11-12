@@ -17,3 +17,10 @@ We do not have any automated method of staying in sync with upstream, although
 we should periodically ensure that we are staying up to date with the latest
 versions of the CoreOS [Prometheus
 Operator](https://github.com/coreos/prometheus-operator).
+
+We know that version 0.17 has known bugs with respect to attaching
+PrometheusRules to our Prometheus cluster. We know those bugs are fixed in 0.24.
+There may be working versions in between, but for now we use 0.24.
+
+Additionally, I've had to add permissions to the `prometheus-operator` cluster
+role in order for it to function correctly.

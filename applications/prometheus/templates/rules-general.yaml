@@ -1,0 +1,23 @@
+---
+# This manifest defines the PrometheusRules generic to our cluster that we'll use
+# to ensure our alerting/monitoring pipelines work as expected.
+#
+# Currently, it is just the `DeadMansSwitch`.
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: general
+  labels:
+    # Prometheus searches for any PrometheusRules with the `role=alert-rules`
+    # label.
+    role: alert-rules
+spec:
+  groups:
+  - name: general.rules
+    rules:
+      - alert: DeadMansSwitch
+        annotations:
+          message: This is a DeadMansSwitch meant to ensure that the entire alerting pipeline is functional.
+        expr: vector(1)
+        labels:
+          severity: none

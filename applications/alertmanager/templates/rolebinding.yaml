@@ -1,0 +1,15 @@
+---
+# This manifest declares a RoleBinding binding the alertmanager role to the
+# alertmanager ServiceAccount.
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: RoleBinding
+metadata:
+  name: alertmanager
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: alertmanager
+subjects:
+- kind: ServiceAccount
+  name: alertmanager
+

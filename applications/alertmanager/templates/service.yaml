@@ -1,0 +1,22 @@
+---
+# This manifest declares the Service which allows us to access Alertmanager
+# (either internally or externally).
+apiVersion: v1
+kind: Service
+metadata:
+  name: alertmanager
+spec:
+  # @TODO(mattjmcnaughton) We temporarily use a ClusterIP, because we don't want this externally accessible
+  # from the internet until we have some form of authentication. We can't have
+  # some form of meaningful authentication until we have https. We can access it
+  # from our local machine using port forwarding. Once we have `https` and
+  # authentication, we can make it a `LoadBalancer`.
+  type: ClusterIP
+  ports:
+  - name: web
+    # By default, Alertmanager listens on port 9093.
+    port: 9093
+    protocol: TCP
+    targetPort: web
+  selector:
+    alertmanager: alertmanager
