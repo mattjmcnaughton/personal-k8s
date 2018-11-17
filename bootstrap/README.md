@@ -121,3 +121,16 @@ Note, we still need to run `kops update cluster` as normal.
 
 Should `kops.yaml` become out of date (which it shouldn't),
 we can use `kops get $CLUSTER_NAME -o yaml > kops.yaml` to regenerate it.
+
+### A note on reserved instances
+
+Our current best practices for cost optimization recommend purchasing a convertible
+m3.medium reserved instance from AWS. m3.medium is the size of the default
+master created by kops, so after buying this reserved instance, we'll
+automatically receive the billing discount. Because it is convertible, if we
+need to increase the size of our master, we can "trade it in" for a more
+expensive reserved instance (i.e. a reserved instance for our new master size).
+Unfortunately, as far as I know, there's no way to purchase reserved instances
+via Terraform. We must do it via the AWS UI. Also, note that tearing down the
+cluster with `terraform destroy` will not impact our reserved instance. We are
+still committed to it for X months.
