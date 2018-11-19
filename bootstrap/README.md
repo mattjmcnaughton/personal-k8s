@@ -4,6 +4,14 @@ This repo contains the code for creating the AWS prerequisites for a k8s
 cluster on AWS via terraform, and helper code and instructions for creating an
 k8s cluster on AWS via terraform.
 
+## Current k8s Version
+
+We are currently running k8s version 1.11.0.
+
+@TODO(mattjmcnaughton) Long term, I'll think of a better way to track this
+information in source code. I'll do it as part of
+https://github.com/mattjmcnaughton/personal-k8s/issues/9.
+
 ## Background
 
 Currently, [kops](https://github.com/kubernetes/kops) documentation for creating
