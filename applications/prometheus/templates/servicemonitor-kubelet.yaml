@@ -1,0 +1,40 @@
+---
+# This manifest declares a ServiceMonitor for kubelet metrics. Any Prometheus clusters which select this
+# ServiceMonitor will be configured to scrape all kubelet metrics (which
+# includes cadvisor metrics).
+#
+# Based on
+# https://github.com/coreos/prometheus-operator/blob/f9bc0aa0fd9aa936f500d9d241098863c60d873d/contrib/kube-prometheus/manifests/prometheus-serviceMonitorKubelet.yaml
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: kubelet
+  labels:
+    k8s-app: kubelet
+    app: kubelet
+    # Prometheus searches for any ServiceMonitor with the `role=service-monitor` label.
+    role: service-monitor
+spec:
+  endpoints:
+    - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+      honorLabels: true
+      interval: 30s
+      port: https-metrics
+      scheme: https
+      tlsConfig:
+        insecureSkipVerify: true
+    - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+      honorLabels: true
+      interval: 30s
+      path: /metrics/cadvisor
+      port: https-metrics
+      scheme: https
+      tlsConfig:
+        insecureSkipVerify: true
+  jobLabel: k8s-app
+  namespaceSelector:
+    matchNames:
+      - kube-system
+  selector:
+    matchLabels:
+      k8s-app: kubelet
