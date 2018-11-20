@@ -6,7 +6,7 @@ k8s cluster on AWS via terraform.
 
 ## Current k8s Version
 
-We are currently running k8s version 1.11.0.
+We are currently running k8s version 1.11.4.
 
 @TODO(mattjmcnaughton) Long term, I'll think of a better way to track this
 information in source code. I'll do it as part of
