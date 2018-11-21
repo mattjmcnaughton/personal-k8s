@@ -27,6 +27,13 @@ spec:
         - name: http
           containerPort: 3000
           protocol: TCP
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "250Mi"
+          limits:
+            cpu: "250m"
+            memory: "250Mi"
         env:
           # @TODO(mattjmcnaughton) Long term, this password should certainly not
           # be plain text nor `password`. For now, it doesn't matter as the

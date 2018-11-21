@@ -28,8 +28,8 @@ spec:
             cpu: 200m
             memory: 100Mi
           requests:
-            cpu: 100m
-            memory: 50Mi
+            cpu: 200m
+            memory: 100Mi
       securityContext:
         runAsNonRoot: true
         runAsUser: 65534
