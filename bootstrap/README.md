@@ -4,14 +4,6 @@ This repo contains the code for creating the AWS prerequisites for a k8s
 cluster on AWS via terraform, and helper code and instructions for creating an
 k8s cluster on AWS via terraform.
 
-## Current k8s Version
-
-We are currently running k8s version 1.11.4.
-
-@TODO(mattjmcnaughton) Long term, I'll think of a better way to track this
-information in source code. I'll do it as part of
-https://github.com/mattjmcnaughton/personal-k8s/issues/9.
-
 ## Background
 
 Currently, [kops](https://github.com/kubernetes/kops) documentation for creating
@@ -117,10 +109,15 @@ example:
 # Load necessary environment variables.
 source env.sh
 
-# Create cluster configuration.
+# Create initial cluster
 kops create cluster --name=$NAME --state=$KOPS_STATE_STORE --zones=$AZ --ssh-public-key PATH_TO_PUBLIC_KEY
 ```
 
-I will go into greater detail on actually using `kops` in my [blog
-post](http://mattjmcnaughton.com/post/a-kubernetes-of-ones-own-part-2/) on
-creating your own Kubernetes cluster using kops.
+We store our `kops` configuration as in `kops.yaml`. This file should
+always reflect the state of our kops cluster.
+
+We can use it to updates kops configuration via `kops replace -f kops.yaml`.
+Note, we still need to run `kops update cluster` as normal.
+
+Should `kops.yaml` become out of date (which it shouldn't),
+we can use `kops get $CLUSTER_NAME -o yaml > kops.yaml` to regenerate it.
