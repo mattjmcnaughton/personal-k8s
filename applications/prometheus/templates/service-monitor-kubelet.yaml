@@ -1,5 +1,6 @@
 ---
-# This manifest declares a ServiceMonitor for kubelet metrics. Any Prometheus clusters which select this
+# This manifest declares a ServiceMonitor for kubelet metrics.
+# Any Prometheus clusters which select this
 # ServiceMonitor will be configured to scrape all kubelet metrics (which
 # includes cadvisor metrics).
 #

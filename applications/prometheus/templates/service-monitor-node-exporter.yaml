@@ -1,0 +1,28 @@
+---
+# This manifest declares a ServiceMonitor for node-exporter metrics. Any
+# Prometheus clusters which select this ServiceMonitor will be configured to
+# scrape all node-exporter metrics.
+#
+# Based on
+# https://github.com/coreos/prometheus-operator/blob/7de4c8c901bb06cf9c9738dff7da9c2d015ccde3/contrib/kube-prometheus/manifests/node-exporter-serviceMonitor.yaml
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    k8s-app: node-exporter
+    app: node-exporter
+    # Prometheus searches for any ServiceMonitor with the `role=service-monitor` label.
+    role: service-monitor
+  name: node-exporter
+spec:
+  endpoints:
+  - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+    interval: 30s
+    port: https
+    scheme: https
+    tlsConfig:
+      insecureSkipVerify: true
+  jobLabel: k8s-app
+  selector:
+    matchLabels:
+      k8s-app: node-exporter

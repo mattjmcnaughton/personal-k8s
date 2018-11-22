@@ -1,0 +1,19 @@
+---
+# This manifest declares the Service, which allows Prometheus to access all
+# node-exporters for scraping.
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    k8s-app: node-exporter
+  name: node-exporter
+spec:
+  # We use ClusterIP because we only want this endpoint accessible within the
+  # cluster.
+  clusterIP: None
+  ports:
+  - name: https
+    port: 9100
+    targetPort: https
+  selector:
+    app: node-exporter
