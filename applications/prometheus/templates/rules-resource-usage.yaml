@@ -1,0 +1,35 @@
+---
+# This manifest defines the PrometheusRules specific to resource usage
+# for monitoring/alerting our k8s cluster.
+#
+# - `severity=critical` indicates we should raise an alert via Opsgenie.
+# - 15m is the default `for`. We may refine this value over time.
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: resource-usage
+  labels:
+    app: resource-usage
+    # Prometheus searches for any PrometheusRules with the `role=alert-rules`
+    # label.
+    role: alert-rules
+spec:
+  groups:
+  - name: resource-usage.rules
+    rules:
+      - alert: PodNearMemoryLimit
+        annotations:
+          message: 'A pod has almost used all of the memory that its been allocated. If the pod uses more than its allocation, it will be killed.'
+        expr: 'count(sum(container_memory_working_set_bytes{container_name!~"POD", pod_name!="", namespace!~"kube-system"}) by (pod_name) / sum (container_spec_memory_limit_bytes{container_name!~"POD",pod_name!=""}) by (pod_name) > .95) >= 1'
+        # Make `for` more aggressive, because there's no change of this
+        # correcting itself.
+        for: 1m
+        labels:
+          severity: critical
+      - alert: PodExperiencingCPUThrottling
+        annotations:
+          message: 'A pod is experiencing CPU throttling a significant portion of the time'
+        expr: 'count(sum by(pod_name) (rate(container_cpu_cfs_throttled_seconds_total{container_name!~"POD",namespace!~"kube-system",pod_name!=""}[1h])) > .25) >= 1'
+        for: 15m
+        labels:
+          severity: critical

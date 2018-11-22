@@ -38,11 +38,11 @@ spec:
       port: web
   resources:
     requests:
-      cpu: "200m"
-      memory: "400Mi"
+      cpu: "500m"
+      memory: "500Mi"
     limits:
-      cpu: "200m"
-      memory: "400Mi"
+      cpu: "500m"
+      memory: "500Mi"
   # @TODO(mattjmcnaughton) Determine a way to make this work when using
   # Minikube. I may need to wait until I'm templating this via a Helm chart.
   storage:
