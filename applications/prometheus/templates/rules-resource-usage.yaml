@@ -20,7 +20,7 @@ spec:
       - alert: PodNearMemoryLimit
         annotations:
           message: 'A pod has almost used all of the memory that its been allocated. If the pod uses more than its allocation, it will be killed.'
-        expr: 'count(sum(container_memory_working_set_bytes{container_name!~"POD", pod_name!="", namespace!~"kube-system"}) by (pod_name) / sum (container_spec_memory_limit_bytes{container_name!~"POD",pod_name!=""}) by (pod_name) > .95) >= 1'
+        expr: 'count((sum(container_memory_working_set_bytes{container_name!~"POD", pod_name!="", namespace!~"kube-system"}) by (pod_name) / sum (container_spec_memory_limit_bytes{container_name!~"POD",pod_name!=""}) by (pod_name)) > .95) >= 1'
         # Make `for` more aggressive, because there's no change of this
         # correcting itself.
         for: 1m
@@ -30,6 +30,13 @@ spec:
         annotations:
           message: 'A pod is experiencing CPU throttling a significant portion of the time'
         expr: 'count(sum by(pod_name) (rate(container_cpu_cfs_throttled_seconds_total{container_name!~"POD",namespace!~"kube-system",pod_name!=""}[1h])) > .25) >= 1'
+        for: 15m
+        labels:
+          severity: critical
+      - alert: PersistentVolumeClaimLowAvailableSpace
+        annotations:
+          message: 'A persistent volume claim is almost out of available space.'
+        expr: 'count((min by(persistentvolumeclaim)(kubelet_volume_stats_available_bytes) / min by(persistentvolumeclaim)(kubelet_volume_stats_capacity_bytes)) < .1) >= 1'
         for: 15m
         labels:
           severity: critical

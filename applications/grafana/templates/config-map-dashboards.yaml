@@ -264,7 +264,6 @@ data:
       "version": 2
     }
 
-
   resource-usage.json: |-
     {
       "annotations": {
@@ -362,7 +361,7 @@ data:
               "label": null,
               "logBase": 1,
               "max": "1.0",
-              "min": null,
+              "min": "0",
               "show": true
             },
             {
@@ -455,7 +454,100 @@ data:
               "label": null,
               "logBase": 1,
               "max": "1.0",
+              "min": "0",
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
               "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": "Prometheus",
+          "description": "The ratio of the storage that's still available for all persistent volume claims.",
+          "fill": 1,
+          "gridPos": {
+            "h": 9,
+            "w": 12,
+            "x": 0,
+            "y": 9
+          },
+          "id": 6,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "null",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "expr": "min by(persistentvolumeclaim)(kubelet_volume_stats_available_bytes) / min by(persistentvolumeclaim)(kubelet_volume_stats_capacity_bytes)",
+              "format": "time_series",
+              "intervalFactor": 1,
+              "refId": "A"
+            }
+          ],
+          "thresholds": [
+            {
+              "colorMode": "critical",
+              "fill": true,
+              "line": true,
+              "op": "lt",
+              "value": 0.1,
+              "yaxis": "left"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "ratio-available-storage-pvc",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": "1",
+              "min": "0",
               "show": true
             },
             {
@@ -514,5 +606,5 @@ data:
       "timezone": "",
       "title": "resource-usage",
       "uid": "to_s-eBik",
-      "version": 1
+      "version": 2
     }
