@@ -16,7 +16,7 @@ spec:
       serviceAccountName: blog
       containers:
       - name: blog
-        image: docker.io/mattjmcnaughton/blog:d75cfee0402b99d5ef911f7306a38dbd21a4b820
+        image: docker.io/mattjmcnaughton/blog:ae0a5cdbe37261de890aab5d5f987f04cb8d29c8
         ports:
         - name: http
           containerPort: 80
