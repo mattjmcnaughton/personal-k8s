@@ -25,7 +25,7 @@ spec:
     legacy: false
   kubernetesApiAccess:
   - 0.0.0.0/0
-  kubernetesVersion: 1.11.4
+  kubernetesVersion: 1.11.5
   masterInternalName: api.internal.k8s.mattjmcnaughton.com
   masterPublicName: api.k8s.mattjmcnaughton.com
   networkCIDR: 172.20.0.0/16
