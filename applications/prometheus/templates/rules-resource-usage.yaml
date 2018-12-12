@@ -40,3 +40,10 @@ spec:
         for: 15m
         labels:
           severity: critical
+      - alert: NodeEBSLowAvailableSpace
+        annotations:
+          message: 'A direct EBS mount on the node (provisioned via Kops) is almost out of space.'
+        expr: 'count((min by(device, instance)(node_filesystem_free_bytes{device=~"/dev/.*"}) / min by(device, instance)(node_filesystem_size_bytes{device=~"/dev/.*"})) < .1) >= 1'
+        for: 15m
+        labels:
+          severity: critical
