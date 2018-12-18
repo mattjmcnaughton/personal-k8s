@@ -1,9 +1,13 @@
----
 # This manifest declares the Role under which our Blog pod will run.
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: blog
+  name: {{ include "blog.name" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "blog.name" . }}
+    app.kubernetes.io/environment: {{ .Values.environment }}
+    helm.sh/chart: {{ include "blog.chart" . }}
+  namespace: {{ .Values.namespace }}
 # Our blog application never needs to access the Kubernetes API, so it has no
 # permissions.
 #

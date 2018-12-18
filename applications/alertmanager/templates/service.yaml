@@ -1,22 +1,25 @@
----
-# This manifest declares the Service which allows us to access Alertmanager
-# (either internally or externally).
+# This template defines the Service through which we'll access our pods.
 apiVersion: v1
 kind: Service
 metadata:
-  name: alertmanager
+  name: {{ include "alertmanager.name" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "alertmanager.name" . }}
+    app.kubernetes.io/environment: {{ .Values.environment }}
+    helm.sh/chart: {{ include "alertmanager.chart" . }}
+  namespace: {{ .Values.namespace }}
 spec:
-  # @TODO(mattjmcnaughton) We temporarily use a ClusterIP, because we don't want this externally accessible
-  # from the internet until we have some form of authentication. We can't have
-  # some form of meaningful authentication until we have https. We can access it
-  # from our local machine using port forwarding. Once we have `https` and
-  # authentication, we can make it a `LoadBalancer`.
-  type: ClusterIP
+  {{- if eq .Values.environment "production" }}
+  type: {{ .Values.service.productionType }}
+  {{- else }}
+  type: {{ .Values.service.developmentType }}
+  {{- end }}
   ports:
-  - name: web
-    # By default, Alertmanager listens on port 9093.
-    port: 9093
-    protocol: TCP
-    targetPort: web
+    - port: {{ .Values.service.port }}
+      targetPort: web
+      protocol: TCP
+      name: web
   selector:
-    alertmanager: alertmanager
+    # We custom specify the `alertmanager` label because the CoreOS Prometheus
+    # operator copies it to the pods from the `alertmanager` resource.
+    alertmanager: {{ include "alertmanager.name" . }}

@@ -1,0 +1,4 @@
+apiVersion: v1
+description: A Helm chart for alertmanager.
+name: alertmanager
+version: 0.0.1

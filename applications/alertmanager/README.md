@@ -14,21 +14,16 @@ the public internet, because we do not have `https` or any form of auth. Until
 we are able to implement those, we'll use port-forwarding: `kubectl port-forward
 svc/prometheus 9093:9093`.
 
-Additionally, one of our manifests is for a `Secret` resource. We want to store
-the secret in a file (for now), so that `kubectl apply -f templates/` still
-creates all necessary resources. However, we do not want to store the actual
-`Secret` file in source control. As such, we make use of a `.sample` file which
-we template via the `envsubst` command. Instructions for doing so can be found
-below. We should run this every time we update
-`alertmanager-config.yaml.sample`.
-
-```bash
-export OPSGENIE_API_KEY=...
-export ALERTMANAGER_YAML_BASE64=$(cat alertmanager-config.yaml.sample | envsubst | base64 | tr -d '\n')
-cat secret.yaml.sample | envsubst > secret.yaml
-```
-
 ## Notes
 
 We based this code on the manifests in [CoreOS'
 kube-prometheus](https://github.com/coreos/prometheus-operator/tree/master/contrib/kube-prometheus/manifests).
+
+You can transform `secret-values.yaml.sample` to
+`secret-values.yaml` with the following:
+
+```
+export OPSGENIE_API_KEY=...
+export ALERTMANAGER_YAML_BASE64=$(cat templates/_alertmanager-config.yaml.sample | envsubst | base64 | tr -d '\n')
+cat secret-values.yaml.sample | envsubst > secret-values.yaml
+```

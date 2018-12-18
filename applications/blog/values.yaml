@@ -1,0 +1,19 @@
+replicaCount: 2
+
+image:
+
+  repository: docker.io/mattjmcnaughton/blog
+  tag: 0b805208794fce961d21cc540290127df97742ed
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 50Mi
+  requests:
+    cpu: 100m
+    memory: 50Mi
+
+service:
+  productionType: LoadBalancer
+  developmentType: NodePort
+  port: 80
