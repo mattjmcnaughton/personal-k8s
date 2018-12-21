@@ -3,27 +3,6 @@
 This directory contains the configuration for all of the applications we deploy
 onto our Kubernetes cluster.
 
-## Currently deployed applications
-
-We deploy the applications listed below via Kubernetes. Each application has its
-own `README.md` with a more in-depth description, so we offer only a brief
-overview here.
-
-We tag applications with either `deployed` or `not-deployed` and
-`guiding-principles-applied` or `guiding-principles-not-applied`, depending on
-their current status.
-
-- `blog (deployed, guiding-principles-not-applied)`: We deploy [my
-  blog](http://mattjmcnaughton.com) via Kubernetes.
-- `prometheus-operator (deployed, guiding-principles-not-applied)`: We use
-  [CoreOS Prometheus Operator](https://coreos.com/operators/prometheus/docs/latest/) to deploy Prometheus
-  instances.
-- `prometheus (deployed, guiding-principles-not-applied)`: We deploy
-  [Prometheus](https://prometheus.io) for monitoring and alerting.
-- `grafana (deployed, guiding-principles-not-applied)`: We deploy
-  [Grafana](https://grafana.org) for dashboards.
-
-
 ## Guiding principles
 
 *Note, this list of guiding principles is still a work in progress. I've only
@@ -41,23 +20,19 @@ analysis. Doing so is a work in progress.
 
 ### Configuration Templating/Deployment
 
-- All applications are deployed via Helm charts and utilize [Helm's Chart Best
-  Practices](https://docs.helm.sh/chart_best_practices/).
-- At least at the beginning, avoid deploying community charts, as writing the
-  chart should give me a stronger idea of how things are working. If I do deploy
-  a community chart, I should still include a subdirectory in `application`,
-  which specifies said chart in `requirements.yaml`.
-- @TODO(mattjmcnaughton) Determine if/how we will share variables among
-  applications in the same environment.
+- See the [helm-deploy.md](design/helm-deploy.md) design doc for information and
+  best practices templating/deployment of manifest files.
 
 ### Labels
 
 - All resources should have a label.
 - Each resource should have (at least) the following labels:
-  - `application`: The `application` to which it belongs (which should be the
+  - `app.kubernetes.io/name`: The `application` to which it belongs (which should be the
     same as the directory in which we've specified the configuration).
-  - `environment`: The `environment` to which the resource belongs. Available
+  - `app.kubernetes.io/environment`: The `environment` to which the resource belongs. Available
     options are `development`, `staging`, `production` and `global`.
+  - `helm.sh/chart`: The name of the chart through which we deployed this
+    resource.
 
 ### Logging
 
@@ -107,7 +82,14 @@ deployed.
 
 ### Secret Management
 
-@TODO(mattjmcnaughton) I'm not exactly sure what this will look like.
+@TODO(mattjmcnaughton) I'm undecided if the secrets workflow described below
+makes sense in the long term.
+
+Currently, we store secrets base64 encoded in a `secret-values.yaml` file, which
+is not checked into source control. We use these to create `Secret` resources in
+Kubernetes via helm templating. We check a `secret-values.yaml.sample` file into
+source control, which can be used as a guide for specifying the necessary
+secrets.
 
 ### Security
 

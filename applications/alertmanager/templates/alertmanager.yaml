@@ -1,20 +1,23 @@
----
 # This manifest declares that we want an Alertmanager cluster deployed via the
 # Prometheus operator. Note, in order to use the `Alertmanager` CRD, we must
 # first deploy CoreOS's Prometheus Operator.
 apiVersion: monitoring.coreos.com/v1
 kind: Alertmanager
 metadata:
-  name: alertmanager
+  name: {{ include "alertmanager.name" . }}
+  labels:
+    # We custom specify the `alertmanager` label because the CoreOS Prometheus
+    # operator copies it to the pods, and we'll use it as the selector for our
+    # service.
+    alertmanager: {{ include "alertmanager.name" . }}
+    app.kubernetes.io/name: {{ include "alertmanager.name" . }}
+    app.kubernetes.io/environment: {{ .Values.environment }}
+    helm.sh/chart: {{ include "alertmanager.chart" . }}
+  namespace: {{ .Values.namespace }}
 spec:
   # Our Alertmanager should have at least two replicas so that its high
   # availability.
-  replicas: 2
-  serviceAccountName: alertmanager
+  replicas: {{ .Values.replicaCount }}
+  serviceAccountName: {{ include "alertmanager.name" . }}
   resources:
-    requests:
-      cpu: "100m"
-      memory: "100Mi"
-    limits:
-      cpu: "100m"
-      memory: "100Mi"
+{{ toYaml .Values.resources | indent 4 }}

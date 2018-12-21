@@ -1,0 +1,16 @@
+replicaCount: 2
+
+resources:
+  limits:
+   cpu: 100m
+   memory: 100Mi
+  requests:
+   cpu: 100m
+   memory: 100Mi
+
+service:
+  # Until we have HTTPS and authentication configured, we do not want Alertmanager to be publicly
+  # accessible.
+  productionType: ClusterIP
+  developmentType: NodePort
+  port: 9093

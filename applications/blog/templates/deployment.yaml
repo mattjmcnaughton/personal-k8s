@@ -1,30 +1,32 @@
----
+# Template for the Deployment managing the pods which serve our blog.
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: blog
+  name: {{ include "blog.name" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "blog.name" . }}
+    app.kubernetes.io/environment: {{ .Values.environment }}
+    helm.sh/chart: {{ include "blog.chart" . }}
+  namespace: {{ .Values.namespace }}
 spec:
-  replicas: 2
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: blog
+      app.kubernetes.io/name: {{ include "blog.name" . }}
+      app.kubernetes.io/environment: {{ .Values.environment }}
   template:
     metadata:
       labels:
-        app: blog
+        app.kubernetes.io/name: {{ include "blog.name" . }}
+        app.kubernetes.io/environment: {{ .Values.environment }}
     spec:
-      serviceAccountName: blog
+      serviceAccountName: {{ include "blog.name" . }}
       containers:
       - name: blog
-        image: docker.io/mattjmcnaughton/blog:0b805208794fce961d21cc540290127df97742ed
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         ports:
         - name: http
           containerPort: 80
           protocol: TCP
         resources:
-          requests:
-            cpu: "100m"
-            memory: "50Mi"
-          limits:
-            cpu: "100m"
-            memory: "50Mi"
+{{ toYaml .Values.resources | indent 10 }}
