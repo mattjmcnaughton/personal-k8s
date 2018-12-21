@@ -14,10 +14,10 @@ metadata:
     role: service-monitor
 spec:
   selector:
-    # Scrape metrics for all pods with the `app=blog` label.
+    # Scrape metrics for all pods with the `app.kubernetes.io/name=blog` label.
     # Overtime, we may want to extend this to include environment tags?
     matchLabels:
-      app: blog
+      app.kubernetes.io/name: blog
   endpoints:
   # @TODO(mattjmcnaughton) For now, our pods all serve via HTTP. Depending on
   # where we terminate the incoming SSL connection, we may want to update this to
