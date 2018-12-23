@@ -14,6 +14,10 @@ the public internet, because we do not have `https` or any form of auth. Until
 we are able to implement those, we'll use port-forwarding: `kubectl port-forward
 svc/prometheus 9093:9093`.
 
+We derivate from our normal guideline of doing base64 secret encoding via helm
+templates because we are templating an entire yaml file, which is a pain. See
+the Notes section below for more info.
+
 ## Notes
 
 We based this code on the manifests in [CoreOS'
@@ -27,3 +31,10 @@ export OPSGENIE_API_KEY=...
 export ALERTMANAGER_YAML_BASE64=$(cat templates/_alertmanager-config.yaml.sample | envsubst | base64 | tr -d '\n')
 cat secret-values.yaml.sample | envsubst > secret-values.yaml
 ```
+
+We derivate from our normal guideline of doing base64 encoding via helm
+templates because we are templating an entire yaml file, which is a pain.
+
+@TODO(mattjmcnaugthon) is this current base64 version the best method, or should
+we be using Helm's files? I think probably this current version because it
+allows `secret-values.yaml` as a common interface.

@@ -35,6 +35,9 @@ We conform to the following guidelines when using helm to deploy an application.
       - Use `envsubst` to generate the actual `secret-values.yaml`.
       - In the `secret.yaml` template file, be sure to use `{{ .Values.secret |
         nospace | b64enc | quote }}"
+        - If we are creating a secret from an entire file, we may first base64
+          encode it before placing it in `secret-values.yaml`. Ensure it does
+          not have any newlines in the base64 encoding.
 - Remove all unnecessary files from `templates`. For now, this includes
   `NOTES.txt`.
 - Our `Chart.yaml` should not specify an `appVersion`.
