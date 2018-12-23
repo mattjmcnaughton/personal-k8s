@@ -1,45 +1,39 @@
----
 # This manifest declares the Deployment responsible for managing the Pods which
 # run Grafana.
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: grafana
+  name: {{ include "grafana.name" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "grafana.name" . }}
+    app.kubernetes.io/environment: {{ .Values.environment }}
+    helm.sh/chart: {{ include "grafana.chart" . }}
+  namespace: {{ .Values.namespace }}
 spec:
-  replicas: 2
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: grafana
+      app.kubernetes.io/name: {{ include "grafana.name" . }}
+      app.kubernetes.io/environment: {{ .Values.environment }}
   template:
     metadata:
       labels:
-        app: grafana
+        app.kubernetes.io/name: {{ include "grafana.name" . }}
+        app.kubernetes.io/environment: {{ .Values.environment }}
     spec:
-      # Ensure we use the `grafana` service account we created for RBAC
-      # purposes.
-      serviceAccountName: grafana
+      serviceAccountName: {{ include "grafana.name" . }}
       containers:
       - name: grafana
-        # Need to use `grafana>=5.x` so that we can provision dashboards and
-        # datasources via configuration files.
-        image: docker.io/grafana/grafana:5.3.2
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         ports:
         - name: http
           containerPort: 3000
           protocol: TCP
         resources:
-          requests:
-            cpu: "100m"
-            memory: "100Mi"
-          limits:
-            cpu: "100m"
-            memory: "100Mi"
+{{ toYaml .Values.resources | indent 10 }}
         env:
-          # @TODO(mattjmcnaughton) Long term, this password should certainly not
-          # be plain text nor `password`. For now, it doesn't matter as the
-          # service is not accessible from the public internet.
         - name: GF_SECURITY_ADMIN_PASSWORD
-          value: password
+          value: {{ .Values.unencryptedAdminPassword }}
         # Mount the volumes containing all of the config files from our
         # ConfigMaps into the proper location.
         volumeMounts:

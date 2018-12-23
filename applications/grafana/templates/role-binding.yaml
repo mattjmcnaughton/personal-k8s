@@ -1,15 +1,19 @@
----
-# This manifest declares a RoleBinding binding the Grafana role to the Grafana
+# This manifest declares a RoleBinding binding the grafana role to the grafana
 # ServiceAccount.
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: RoleBinding
 metadata:
-  name: grafana
+  name: {{ include "grafana.name" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "grafana.name" . }}
+    app.kubernetes.io/environment: {{ .Values.environment }}
+    helm.sh/chart: {{ include "grafana.chart" . }}
+  namespace: {{ .Values.namespace }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
-  name: grafana
+  name: {{ include "grafana.name" . }}
 subjects:
 - kind: ServiceAccount
-  name: grafana
+  name: {{ include "grafana.name" . }}
 

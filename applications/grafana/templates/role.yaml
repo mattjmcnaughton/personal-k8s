@@ -1,13 +1,18 @@
----
-# This manifest declares the Role under which our Grafana pod will run.
+# This manifest declares the Role under which our grafana pod will run.
 kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: grafana
-# Our Grafana application never needs to access the Kubernetes API, so it has no
+  name: {{ include "grafana.name" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "grafana.name" . }}
+    app.kubernetes.io/environment: {{ .Values.environment }}
+    helm.sh/chart: {{ include "grafana.chart" . }}
+  namespace: {{ .Values.namespace }}
+# Our grafana application never needs to access the Kubernetes API, so it has no
 # permissions.
 #
 # @TODO(mattjmcnaughton) Long term, should we create (or utilize if it already
 # exists) a single role specifying the ServiceAccount should not interact with
 # the Kubernetes API.
 rules: []
+

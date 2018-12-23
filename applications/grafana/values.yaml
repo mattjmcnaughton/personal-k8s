@@ -1,0 +1,33 @@
+replicaCount: 2
+
+image:
+  repository: docker.io/grafana/grafana
+  # Need to use `grafana>=5.x` so that we can provision dashboards and
+  # datasources via configuration files.
+  tag: 5.3.2
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 100Mi
+  requests:
+    cpu: 100m
+    memory: 100Mi
+
+service:
+  # @TODO(mattjmcnaughton) We temporarily use a ClusterIP, because we don't want this externally accessible
+  # from the internet until we have some form of authentication. We can't have
+  # some form of meaningful authentication until we have https. We can access it
+  # from our local machine using port forwarding. Once we have `https` and
+  # authentication, we can make it a `LoadBalancer` (or expose via an ingress).
+  productionType: ClusterIP
+  developmentType: ClusterIP
+  port: 3000
+
+# @TODO(mattjmcnaughton) Long term, this password should certainly not
+# be plain text nor `password`. For now, it doesn't matter as the
+# service is not accessible from the public internet.
+#
+# Once it is a true secret, we will store it in secret-values.yaml according to
+# our typical secrets workflow.
+unencryptedAdminPassword: password

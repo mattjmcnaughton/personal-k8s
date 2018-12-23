@@ -4,7 +4,12 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: grafana-dashboards
+  name: {{ include "grafana.name" . }}-dashboards
+  labels:
+    app.kubernetes.io/name: {{ include "grafana.name" . }}-dashboards
+    app.kubernetes.io/environment: {{ .Values.environment }}
+    helm.sh/chart: {{ include "grafana.chart" . }}
+  namespace: {{ .Values.namespace }}
 data:
   # This configuration file is responsible for the dashboard visualizing our
   # adherence with our blog's SLO.
