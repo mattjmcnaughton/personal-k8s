@@ -32,10 +32,9 @@ We conform to the following guidelines when using helm to deploy an application.
       `applications/.gitignore`.
     - Create a secret-values.yaml.sample with an environment variable
       placeholder for the actual value.
-      - Use `export SECRET_VALUE_BASE64=$(echo my-secret | base64 | tr -d '\n'); more secret-values.sample.yaml | envsubst > secret-values.yaml` to generate the actual secret value.
-        - @TODO(mattjmcnaughton) Perhaps I should create a lightweight
-          script/application to abstract this operation. Perhaps I could also
-          use a base64 included in helm templating to run the helm template.
+      - Use `envsubst` to generate the actual `secret-values.yaml`.
+      - In the `secret.yaml` template file, be sure to use `{{ .Values.secret |
+        nospace | b64enc | quote }}"
 - Remove all unnecessary files from `templates`. For now, this includes
   `NOTES.txt`.
 - Our `Chart.yaml` should not specify an `appVersion`.

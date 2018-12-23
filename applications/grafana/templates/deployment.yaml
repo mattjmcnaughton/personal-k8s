@@ -33,7 +33,10 @@ spec:
 {{ toYaml .Values.resources | indent 10 }}
         env:
         - name: GF_SECURITY_ADMIN_PASSWORD
-          value: {{ .Values.unencryptedAdminPassword }}
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "grafana.name" . }}-admin-password
+              key: password
         # Mount the volumes containing all of the config files from our
         # ConfigMaps into the proper location.
         volumeMounts:

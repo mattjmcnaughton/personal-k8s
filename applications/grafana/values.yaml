@@ -23,11 +23,3 @@ service:
   productionType: ClusterIP
   developmentType: ClusterIP
   port: 3000
-
-# @TODO(mattjmcnaughton) Long term, this password should certainly not
-# be plain text nor `password`. For now, it doesn't matter as the
-# service is not accessible from the public internet.
-#
-# Once it is a true secret, we will store it in secret-values.yaml according to
-# our typical secrets workflow.
-unencryptedAdminPassword: password
