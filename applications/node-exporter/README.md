@@ -9,10 +9,6 @@ makes available node metrics.
 @TODO(mattjmcnaughton) We have not yet implemented the guiding principles for
 this application, so we can't discuss how it violates them.
 
-This code is fairly directly copied from the
-[example manifests](https://github.com/coreos/prometheus-operator/tree/master/contrib/kube-prometheus/manifests)
-for the Prometheus CoreOS operator.
-
 ## Notes
 
 This code is fairly directly copied from the

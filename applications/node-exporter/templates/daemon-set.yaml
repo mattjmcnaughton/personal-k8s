@@ -1,38 +1,33 @@
----
 # This manifest declares the DaemonSet responsible for managing the Pods which
 # will export node metrics to prometheus. A DaemonSet ensures all eligible nodes
 # run a copy of the pod.
 apiVersion: apps/v1beta2
 kind: DaemonSet
 metadata:
+  name: {{ include "node-exporter.name" . }}
   labels:
-    app: node-exporter
-  name: node-exporter
+    app.kubernetes.io/name: {{ include "node-exporter.name" . }}
+    app.kubernetes.io/environment: {{ .Values.environment }}
+    helm.sh/chart: {{ include "node-exporter.chart" . }}
+  namespace: {{ .Values.namespace }}
 spec:
   selector:
     matchLabels:
-      app: node-exporter
+      app.kubernetes.io/name: {{ include "node-exporter.name" . }}
+      app.kubernetes.io/environment: {{ .Values.environment }}
   template:
     metadata:
       labels:
-        app: node-exporter
+        app.kubernetes.io/name: {{ include "node-exporter.name" . }}
+        app.kubernetes.io/environment: {{ .Values.environment }}
     spec:
       containers:
       - args:
-        - --web.listen-address=127.0.0.1:9100
-        - --path.procfs=/host/proc
-        - --path.sysfs=/host/sys
-        - --collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var/lib/docker/.+)($|/)
-        - --collector.filesystem.ignored-fs-types=^(autofs|binfmt_misc|cgroup|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|mqueue|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|sysfs|tracefs)$
-        image: quay.io/prometheus/node-exporter:v0.16.0
+{{ toYaml .Values.nodeExporterArgs | indent 10 }}
+        image: "{{ .Values.nodeExporterImage.repository }}:{{ .Values.nodeExporterImage.tag }}"
         name: node-exporter
         resources:
-          limits:
-            cpu: 102m
-            memory: 180Mi
-          requests:
-            cpu: 102m
-            memory: 180Mi
+{{ toYaml .Values.nodeExporterResources | indent 10 }}
         volumeMounts:
         - mountPath: /host/proc
           name: proc
@@ -45,26 +40,22 @@ spec:
           name: root
           readOnly: true
       - args:
-        - --secure-listen-address=$(IP):9100
-        - --upstream=http://127.0.0.1:9100/
+{{ toYaml .Values.kubeRbacProxyArgs | indent 10 }}
         env:
         - name: IP
           valueFrom:
             fieldRef:
               fieldPath: status.podIP
-        image: quay.io/coreos/kube-rbac-proxy:v0.4.0
+        image: "{{ .Values.kubeRbacProxyImage.repository }}:{{ .Values.kubeRbacProxyImage.tag }}"
         name: kube-rbac-proxy
         ports:
+          # @TODO(mattjmcnaughton) Should I be working hard to include the port
+          # in values.yaml somehow?
         - containerPort: 9100
           hostPort: 9100
           name: https
         resources:
-          limits:
-            cpu: 20m
-            memory: 40Mi
-          requests:
-            cpu: 10m
-            memory: 20Mi
+{{ toYaml .Values.kubeRbacProxyResources | indent 10 }}
       hostNetwork: true
       hostPID: true
       nodeSelector:
@@ -72,12 +63,14 @@ spec:
       securityContext:
         runAsNonRoot: true
         runAsUser: 65534
-      serviceAccountName: node-exporter
+      serviceAccountName: {{ include "node-exporter.name" . }}
       # Schedule this pod on the master, so we can get node resource usage on
       # the master as well.
+      #
+    {{- with .Values.tolerations }}
       tolerations:
-      - effect: NoSchedule
-        key: node-role.kubernetes.io/master
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
       volumes:
       - hostPath:
           path: /proc

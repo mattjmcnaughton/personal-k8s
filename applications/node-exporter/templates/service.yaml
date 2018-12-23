@@ -1,19 +1,23 @@
----
 # This manifest declares the Service, which allows Prometheus to access all
 # node-exporters for scraping.
 apiVersion: v1
 kind: Service
 metadata:
+  name: {{ include "node-exporter.name" . }}
   labels:
-    k8s-app: node-exporter
-  name: node-exporter
+    app.kubernetes.io/name: {{ include "node-exporter.name" . }}
+    app.kubernetes.io/environment: {{ .Values.environment }}
+    helm.sh/chart: {{ include "node-exporter.chart" . }}
+  namespace: {{ .Values.namespace }}
 spec:
   # We use ClusterIP because we only want this endpoint accessible within the
   # cluster.
   clusterIP: None
   ports:
   - name: https
-    port: 9100
+    port: {{ .Values.service.port }}
     targetPort: https
+    protocol: TCP
   selector:
-    app: node-exporter
+    app.kubernetes.io/name: {{ include "node-exporter.name" . }}
+    app.kubernetes.io/environment: {{ .Values.environment }}
