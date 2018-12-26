@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "next-cloud.name" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "next-cloud.name" . }}
+    app.kubernetes.io/environment: {{ .Values.environment }}
+    helm.sh/chart: {{ include "next-cloud.chart" . }}
+  namespace: {{ .Values.namespace }}
+spec:
+  accessModes:
+    # Only one node can use this in read write mode, which essentially means we
+    # can only have one `next-cloud` pod running at once in our
+    # next-cloud deployment.
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi

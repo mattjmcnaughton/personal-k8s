@@ -1,0 +1,18 @@
+# This manifest declares a RoleBinding binding the next-cloud role to the next-cloud
+# ServiceAccount.
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: RoleBinding
+metadata:
+  name: {{ include "next-cloud.name" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "next-cloud.name" . }}
+    app.kubernetes.io/environment: {{ .Values.environment }}
+    helm.sh/chart: {{ include "next-cloud.chart" . }}
+  namespace: {{ .Values.namespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ include "next-cloud.name" . }}
+subjects:
+- kind: ServiceAccount
+  name: {{ include "next-cloud.name" . }}

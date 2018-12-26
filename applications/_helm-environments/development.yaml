@@ -1,2 +1,7 @@
 environment: development
 namespace: default
+
+# No development databases have persistence enabled for postgres.
+postgresql:
+  persistence:
+    enabled: false

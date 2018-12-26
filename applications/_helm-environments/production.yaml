@@ -1,2 +1,7 @@
 environment: production
 namespace: default
+
+# In production, we want postgres to persist data.
+postgresql:
+  persistence:
+    enabled: true

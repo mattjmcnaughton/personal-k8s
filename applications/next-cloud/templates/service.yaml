@@ -1,0 +1,22 @@
+# The template for the Service which allows access to our next-cloud.
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "next-cloud.name" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "next-cloud.name" . }}
+    app.kubernetes.io/environment: {{ .Values.environment }}
+    helm.sh/chart: {{ include "next-cloud.chart" . }}
+  namespace: {{ .Values.namespace }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      # @TODO(mattjmcnaughton) Eventually will either use https (or we'll
+      # provide https via the Ingress).
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: {{ include "next-cloud.name" . }}
+    app.kubernetes.io/environment: {{ .Values.environment }}

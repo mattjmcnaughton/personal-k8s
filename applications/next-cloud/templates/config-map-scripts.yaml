@@ -1,0 +1,14 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "next-cloud.name" . }}-scripts
+  labels:
+    app.kubernetes.io/name: {{ include "next-cloud.name" . }}-scripts
+    app.kubernetes.io/environment: {{ .Values.environment }}
+    helm.sh/chart: {{ include "next-cloud.chart" . }}
+  namespace: {{ .Values.namespace }}
+data:
+{{- with .Values.initScripts }}
+{{ toYaml . | indent 2 }}
+{{- end }}
