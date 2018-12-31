@@ -34,8 +34,8 @@ kubeRbacProxyResources:
     memory: 40Mi
 
 tolerations:
-  - effect: NoSchedule
-    key: node-role.kubernetes.io/master
+  # Allow node-exporter to run on all nodes (regardless of their tolerations).
+  - operator: "Exists"
 
 service:
   port: 9100

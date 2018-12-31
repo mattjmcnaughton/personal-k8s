@@ -1,4 +1,4 @@
-replicaCount: 2
+replicaCount: 1
 
 image:
   repository: docker.io/grafana/grafana
@@ -13,6 +13,13 @@ resources:
   requests:
     cpu: 100m
     memory: 100Mi
+
+# Allow Grafana to run on spot instances because we do not care if its high
+# availaibility.
+tolerations:
+- key: "type"
+  operator: "Equal"
+  value: "spot-instance"
 
 service:
   # @TODO(mattjmcnaughton) We temporarily use a ClusterIP, because we don't want this externally accessible

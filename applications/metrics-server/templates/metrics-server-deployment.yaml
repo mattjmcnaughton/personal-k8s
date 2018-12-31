@@ -48,3 +48,9 @@ spec:
         volumeMounts:
         - name: tmp-dir
           mountPath: /tmp
+      # Allow MetricsServer to run on spot instances because we do not care if its high
+      # availaibility.
+      tolerations:
+      - key: "type"
+        operator: "Equal"
+        value: "spot-instance"

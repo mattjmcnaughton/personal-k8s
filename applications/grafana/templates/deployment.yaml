@@ -51,6 +51,8 @@ spec:
           subPath: dashboards.yaml
         - name: dashboards-volume
           mountPath: /var/lib/grafana/dashboards
+      tolerations:
+{{ toYaml .Values.tolerations | indent 8 }}
       # Create volumes from our two different ConfigMaps. We can then mount
       # these volumes into the Pod, meaning the configuration files are now
       # available to Grafana.

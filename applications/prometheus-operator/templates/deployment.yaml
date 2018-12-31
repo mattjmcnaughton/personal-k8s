@@ -34,3 +34,9 @@ spec:
         runAsNonRoot: true
         runAsUser: 65534
       serviceAccountName: prometheus-operator
+      # Allow prometheus-operator to run on spot instances because we do not care if its high
+      # availaibility.
+      tolerations:
+      - key: "type"
+        operator: "Equal"
+        value: "spot-instance"

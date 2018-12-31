@@ -11,6 +11,13 @@ resources:
     cpu: 256m
     memory: 512Mi
 
+# Allow next-cloud to run on spot instances because we do not care if its high
+# availaibility.
+tolerations:
+- key: "type"
+  operator: "Equal"
+  value: "spot-instance"
+
 initScripts:
   # See instructions in README.md. For now, you must manually execute this
   # script after we first create our NextCloud instance.
@@ -47,6 +54,17 @@ postgresql:
     accessModes:
       - ReadWriteOnce
     size: 5Gi
+
+  master:
+    # Allow next-cloud postgres to run on spot instances because we do not care if its high
+    # availaibility.
+    #
+    # @TODO(mattjmcnaughton) I'm not positive if this is a good idea...
+    tolerations:
+    - key: "type"
+      operator: "Equal"
+      value: "spot-instance"
+
 
   resources:
     limits:

@@ -78,6 +78,8 @@ spec:
               key: password
         - name: POSTGRES_HOST
           value: {{ .Values.postgresql.fullnameOverride }}
+      tolerations:
+{{ toYaml .Values.tolerations | indent 8 }}
       volumes:
         - name: next-cloud-persistent-storage
           persistentVolumeClaim:

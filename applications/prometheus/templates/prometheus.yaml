@@ -7,10 +7,9 @@ kind: Prometheus
 metadata:
   name: prometheus
 spec:
-  # Our Prometheus cluster should have at least 2 replicas. Under the hood,
-  # the Prometheus Operator creates a stateful set. So we will have `#replicas`
+  # Under the hood, the Prometheus Operator creates a stateful set. So we will have `#replicas`
   # pods in our stateful set.
-  replicas: 2
+  replicas: 1
   # Retain data for 90 days. Note, we may need to decrease these if we find it
   # requires too much storage.
   retention: "90d"
