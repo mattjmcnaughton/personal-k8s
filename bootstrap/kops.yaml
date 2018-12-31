@@ -69,13 +69,44 @@ spec:
 
 ---
 
+# `nodes` is node machines which we don't expect to be turned off without
+# significant warning.
+#
+# @TODO(mattjmcnaughton) Determine if I want to purchase a reserved instance for
+# this(these) node(s).
+# https://github.com/mattjmcnaughton/personal-k8s/issues/16
+apiVersion: kops/v1alpha2
+kind: InstanceGroup
+metadata:
+  creationTimestamp: 2018-09-03T18:56:22Z
+  labels:
+    kops.k8s.io/cluster: k8s.mattjmcnaughton.com
+  name: nodes
+spec:
+  image: kope.io/k8s-1.9-debian-jessie-amd64-hvm-ebs-2018-03-11
+  machineType: t2.medium
+  maxSize: 1
+  minSize: 1
+  nodeLabels:
+    kops.k8s.io/instancegroup: nodes
+  role: Node
+  rootVolumeSize: 32
+  rootVolumeType: gp2
+  subnets:
+  - us-west-2a
+
+---
+
+# `nodes-spot-instances` is node machines backed by spot instances. We should
+# not run high availability nodes on these applications, and we ensure we don't
+# by adding a taint to the node which non-ha applications must tolerate.
 apiVersion: kops/v1alpha2
 kind: InstanceGroup
 metadata:
   creationTimestamp: 2018-09-03T18:56:23Z
   labels:
     kops.k8s.io/cluster: k8s.mattjmcnaughton.com
-  name: nodes
+  name: nodes-spot-instances
 spec:
   image: kope.io/k8s-1.9-debian-jessie-amd64-hvm-ebs-2018-03-11
   machineType: t2.medium
@@ -83,9 +114,11 @@ spec:
   maxSize: 2
   minSize: 2
   nodeLabels:
-    kops.k8s.io/instancegroup: nodes
+    kops.k8s.io/instancegroup: nodes-spot-instances
   role: Node
-  rootVolumeSize: 64
+  taints:
+    - type=spot-instance:NoSchedule
+  rootVolumeSize: 32
   rootVolumeType: gp2
   subnets:
   - us-west-2a
