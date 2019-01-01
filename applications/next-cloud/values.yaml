@@ -24,11 +24,11 @@ initScripts:
   manual-first-boot.sh: |-
     #!/bin/bash
     for appToInstall in tasks calendar deck; do
-      su -s /bin/bash -c "php occ app:install $appToInstall" www-data || true
+      su -s /bin/bash -c "php occ app:install $appToInstall" www-data
     done
 
     for appToDisable in gallery activity; do
-      su -s /bin/bash -c "php occ app:disable $appToDisable" www-data || true
+      su -s /bin/bash -c "php occ app:disable $appToDisable" www-data
     done
 
     su -s /bin/bash -c "export OC_PASS=$NEXTCLOUD_PERSONAL_PASSWORD; php occ user:add --password-from-env --group='admin' $NEXTCLOUD_PERSONAL_USER" www-data
