@@ -1,10 +1,15 @@
----
+# This manifest declares the Role under which our prometheus-operator pod will run.
+#
 # Note: I've had to add rules beyond what I initially found on Github when
 # upgrading from 0.17 to 0.24.
-apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
-  name: prometheus-operator
+  name: {{ include "prometheus-operator.name" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "prometheus-operator.name" . }}
+    app.kubernetes.io/environment: {{ .Values.environment }}
+    helm.sh/chart: {{ include "prometheus-operator.chart" . }}
 rules:
 - apiGroups:
   - extensions

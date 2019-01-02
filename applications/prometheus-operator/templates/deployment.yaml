@@ -1,42 +1,36 @@
----
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
+  name: {{ include "prometheus-operator.name" . }}
   labels:
-    k8s-app: prometheus-operator
-  name: prometheus-operator
+    app.kubernetes.io/name: {{ include "prometheus-operator.name" . }}
+    app.kubernetes.io/environment: {{ .Values.environment }}
+    helm.sh/chart: {{ include "prometheus-operator.chart" . }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "prometheus-operator.name" . }}
+      app.kubernetes.io/environment: {{ .Values.environment }}
   template:
     metadata:
       labels:
-        k8s-app: prometheus-operator
+        app.kubernetes.io/name: {{ include "prometheus-operator.name" . }}
+        app.kubernetes.io/environment: {{ .Values.environment }}
     spec:
       containers:
       - args:
-        - --kubelet-service=kube-system/kubelet
-        - --config-reloader-image=quay.io/coreos/configmap-reload:v0.0.1
-        # We know that certain PrometheusRule operations fail with 0.17 and
-        # succeed with 0.24, so use at least 0.24.
-        image: quay.io/coreos/prometheus-operator:v0.24.0
+{{ toYaml .Values.args | indent 10 }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         name: prometheus-operator
         ports:
         - containerPort: 8080
           name: http
         resources:
-          limits:
-            cpu: 200m
-            memory: 100Mi
-          requests:
-            cpu: 200m
-            memory: 100Mi
+{{ toYaml .Values.resources | indent 10 }}
       securityContext:
-        runAsNonRoot: true
-        runAsUser: 65534
-      serviceAccountName: prometheus-operator
-      # Allow prometheus-operator to run on spot instances because we do not care if its high
-      # availaibility.
+{{ toYaml .Values.securityContext | indent 8 }}
+      serviceAccountName: {{ include "prometheus-operator.name" . }}
       tolerations:
-      - key: "type"
-        operator: "Equal"
-        value: "spot-instance"
+{{ toYaml .Values.tolerations | indent 8 }}
+
