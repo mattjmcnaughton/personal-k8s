@@ -1,5 +1,5 @@
-# This manifest declares the Role under which our node-exporter pod will run.
-kind: Role
+# This manifest declares the ClusterRole under which our node-exporter pod will run.
+kind: ClusterRole
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: {{ include "node-exporter.name" . }}
@@ -7,7 +7,6 @@ metadata:
     app.kubernetes.io/name: {{ include "node-exporter.name" . }}
     app.kubernetes.io/environment: {{ .Values.environment }}
     helm.sh/chart: {{ include "node-exporter.chart" . }}
-  namespace: {{ .Values.namespace }}
 rules:
 - apiGroups:
   - authentication.k8s.io

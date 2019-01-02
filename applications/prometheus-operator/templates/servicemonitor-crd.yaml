@@ -3,6 +3,9 @@ kind: CustomResourceDefinition
 metadata:
   creationTimestamp: null
   name: servicemonitors.monitoring.coreos.com
+  labels:
+    helm.sh/chart: {{ include "prometheus-operator.chart" . }}
+    app.kubernetes.io/environment: {{ .Values.environment }}
 spec:
   group: monitoring.coreos.com
   names:

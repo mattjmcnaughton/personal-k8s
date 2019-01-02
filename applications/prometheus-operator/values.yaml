@@ -1,0 +1,30 @@
+replicaCount: 1
+
+args:
+- --kubelet-service=kube-system/kubelet
+- --config-reloader-image=quay.io/coreos/configmap-reload:v0.0.1
+
+image:
+  repository: quay.io/coreos/prometheus-operator
+  # We know that certain PrometheusRule operations fail with 0.17 and
+  # succeed with 0.24, so use at least 0.24.
+  tag: v0.24.0
+
+resources:
+  limits:
+    cpu: 200m
+    memory: 100Mi
+  requests:
+    cpu: 200m
+    memory: 100Mi
+
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 65534
+
+# Allow prometheus-operator to run on spot instances because we do not care if its high
+# availaibility.
+tolerations:
+- key: "type"
+  operator: "Equal"
+  value: "spot-instance"
