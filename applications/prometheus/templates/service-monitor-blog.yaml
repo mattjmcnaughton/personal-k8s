@@ -1,4 +1,3 @@
----
 # This manifest declares a ServiceMonitor for our blog. Any Prometheus clusters
 # which select this ServiceMonitor will be configured to scrape metrics from all
 # pods serving the blog. We will define one of these for each service we deploy
@@ -8,10 +7,10 @@ kind: ServiceMonitor
 metadata:
   name: blog
   labels:
-    app: blog
-    # Prometheus searches for any ServiceMonitor with the `role=service-monitor`
-    # label.
-    role: service-monitor
+    app.kubernetes.io/name: blog
+    app.kubernetes.io/environment: {{ .Values.environment }}
+    helm.sh/chart: {{ include "prometheus.chart" . }}
+{{ toYaml .Values.serviceMonitorSelectorLabels | indent 4 }}
 spec:
   selector:
     # Scrape metrics for all pods with the `app.kubernetes.io/name=blog` label.
@@ -28,9 +27,6 @@ spec:
   # for the port so we can use it here.
   - port: http
     interval: 5s
-  # @TODO(mattjmcnaughton) Update this selector from `default` to the proper
-  # namespace once we've taken steps to use an isolated namespace for each
-  # application.
   namespaceSelector:
     matchNames:
-      - default
+      - {{ .Values.namespace }}

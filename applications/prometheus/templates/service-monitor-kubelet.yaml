@@ -1,4 +1,3 @@
----
 # This manifest declares a ServiceMonitor for kubelet metrics.
 # Any Prometheus clusters which select this
 # ServiceMonitor will be configured to scrape all kubelet metrics (which
@@ -11,10 +10,14 @@ kind: ServiceMonitor
 metadata:
   name: kubelet
   labels:
+    # @TODO(mattjmcnaughton) Ideally, I'd like to delete the `k8s-app` and `app`
+    # labels, but I'm not sure Prometheus depends on them.
     k8s-app: kubelet
     app: kubelet
-    # Prometheus searches for any ServiceMonitor with the `role=service-monitor` label.
-    role: service-monitor
+    app.kubernetes.io/name: kubelet
+    app.kubernetes.io/environment: {{ .Values.environment }}
+    helm.sh/chart: {{ include "prometheus.chart" . }}
+{{ toYaml .Values.serviceMonitorSelectorLabels | indent 4 }}
 spec:
   endpoints:
     - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token

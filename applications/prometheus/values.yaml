@@ -1,0 +1,37 @@
+replicaCount: 1
+
+# Retain data for 90 days. Note, we may need to decrease these if we find it
+# requires too much storage.
+retention: "90d"
+
+# ServiceMonitors specify how the Prometheus cluster should scrape metrics. We
+# attach `ServiceMonitors` we've defined to this Prometheus cluster using the
+# `serviceMonitorSelector`.
+serviceMonitorSelectorLabels:
+  role: service-monitor
+
+# PrometheusRules specify the rules under which Prometheus should fire alerts
+# (which are handeled by AlertManager). We attach `PrometheusRules` to our
+# `Prometheus` instance via the `ruleSelector`.
+ruleSelectorLabels:
+  role: alert-roles
+
+resources:
+  requests:
+    cpu: "500m"
+    memory: "500Mi"
+  limits:
+    cpu: "500m"
+    memory: "500Mi"
+
+persistence:
+  size: "20Gi"
+
+service:
+  # @TODO(mattjmcnaughton) We temporarily use a ClusterIP, because we don't want this externally accessible
+  # from the internet until we have some form of authentication. We can't have
+  # some form of meaningful authentication until we have https. We can access it
+  # from our local machine using port forwarding. Once we have `https` and
+  # authentication, we can make it a `LoadBalancer` (or expose it via ingress).
+  productionType: ClusterIP
+  developmentType: ClusterIP

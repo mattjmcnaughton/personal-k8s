@@ -1,4 +1,3 @@
----
 # This manifest declares a ServiceMonitor for node-exporter metrics. Any
 # Prometheus clusters which select this ServiceMonitor will be configured to
 # scrape all node-exporter metrics.
@@ -12,7 +11,10 @@ metadata:
     k8s-app: node-exporter
     app: node-exporter
     # Prometheus searches for any ServiceMonitor with the `role=service-monitor` label.
-    role: service-monitor
+    app.kubernetes.io/name: node-exporter
+    app.kubernetes.io/environment: {{ .Values.environment }}
+    helm.sh/chart: {{ include "prometheus.chart" . }}
+{{ toYaml .Values.serviceMonitorSelectorLabels | indent 4 }}
   name: node-exporter
 spec:
   endpoints:
