@@ -12,7 +12,6 @@ this application, so we can't discuss how it violates them.
 
 This code is fairly directly copied from the [metrics-server
 deploy](https://github.com/kubernetes-incubator/metrics-server/tree/master/deploy/1.8%2B) templates.
-As a result, it may never exactly conform to our best practices.
 
 ## Notes
 
@@ -21,3 +20,5 @@ deploy](https://github.com/kubernetes-incubator/metrics-server/tree/master/deplo
 
 We don't have a defined method of ensuring we stay in sync with upstream, but we
 should try and check in periodically.
+
+Additionally, I'm not positive if this deploys correctly on minikube.

@@ -1,13 +1,16 @@
----
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
   name: metrics-server:system:auth-delegator
+  labels:
+    app.kubernetes.io/name: {{ include "metrics-server.name" . }}
+    app.kubernetes.io/environment: {{ .Values.environment }}
+    helm.sh/chart: {{ include "metrics-server.chart" . }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
   name: system:auth-delegator
 subjects:
 - kind: ServiceAccount
-  name: metrics-server
+  name: {{ include "metrics-server.name" . }}
   namespace: kube-system

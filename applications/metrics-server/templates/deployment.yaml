@@ -1,0 +1,43 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ include "metrics-server.name" . }}
+  namespace: kube-system
+  labels:
+    k8s-app: metrics-server
+    app.kubernetes.io/name: {{ include "metrics-server.name" . }}
+    app.kubernetes.io/environment: {{ .Values.environment }}
+    helm.sh/chart: {{ include "metrics-server.chart" . }}
+spec:
+  selector:
+    matchLabels:
+      k8s-app: metrics-server
+      app.kubernetes.io/name: {{ include "metrics-server.name" . }}
+      app.kubernetes.io/environment: {{ .Values.environment }}
+  template:
+    metadata:
+      name: {{ include "metrics-server.name" . }}
+      labels:
+        k8s-app: metrics-server
+        k8s-app: metrics-server
+        app.kubernetes.io/name: {{ include "metrics-server.name" . }}
+        app.kubernetes.io/environment: {{ .Values.environment }}
+    spec:
+      serviceAccountName: {{ include "metrics-server.name" . }}
+      containers:
+      - name: metrics-server
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: IfNotPresent
+        command:
+{{ toYaml .Values.command | indent 8 }}
+        volumeMounts:
+        - name: tmp-dir
+          mountPath: /tmp
+        resources:
+{{ toYaml .Values.resources | indent 10 }}
+      tolerations:
+{{ toYaml .Values.tolerations | indent 8 }}
+      volumes:
+      # mount in tmp so we can safely use from-scratch images and/or read-only containers
+      - name: tmp-dir
+        emptyDir: {}

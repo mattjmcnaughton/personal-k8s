@@ -1,0 +1,26 @@
+image:
+  repository: k8s.gcr.io/metrics-server-amd64
+  tag: v0.3.1
+
+# We must override the `command` because `kops` doesn't set up the TLS
+# certs right.
+#
+# https://github.com/kubernetes-incubator/metrics-server/issues/146
+command:
+- /metrics-server
+- --kubelet-insecure-tls
+
+resources:
+  limits:
+    cpu: 200m
+    memory: 100Mi
+  requests:
+    cpu: 200m
+    memory: 100Mi
+
+# Allow metrics-server to run on spot instances because we do not care if its high
+# availaibility.
+tolerations:
+- key: "type"
+  operator: "Equal"
+  value: "spot-instance"

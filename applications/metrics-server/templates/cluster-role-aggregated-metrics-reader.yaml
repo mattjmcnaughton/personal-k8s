@@ -3,6 +3,9 @@ apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: system:aggregated-metrics-reader
   labels:
+    app.kubernetes.io/name: {{ include "metrics-server.name" . }}
+    app.kubernetes.io/environment: {{ .Values.environment }}
+    helm.sh/chart: {{ include "metrics-server.chart" . }}
     rbac.authorization.k8s.io/aggregate-to-view: "true"
     rbac.authorization.k8s.io/aggregate-to-edit: "true"
     rbac.authorization.k8s.io/aggregate-to-admin: "true"

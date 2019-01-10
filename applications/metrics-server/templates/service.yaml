@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "metrics-server.name" . }}
+  namespace: kube-system
+  labels:
+    app.kubernetes.io/name: {{ include "metrics-server.name" . }}
+    app.kubernetes.io/environment: {{ .Values.environment }}
+    helm.sh/chart: {{ include "metrics-server.chart" . }}
+    kubernetes.io/name: "Metrics-server"
+spec:
+  selector:
+    k8s-app: metrics-server
+    app.kubernetes.io/name: {{ include "metrics-server.name" . }}
+    app.kubernetes.io/environment: {{ .Values.environment }}
+  ports:
+  - port: 443
+    protocol: TCP
+    targetPort: 443
