@@ -1,4 +1,3 @@
----
 # This manifest defines the PrometheusRules specific to resource usage
 # for monitoring/alerting our k8s cluster.
 #
@@ -9,10 +8,10 @@ kind: PrometheusRule
 metadata:
   name: resource-usage
   labels:
-    app: resource-usage
-    # Prometheus searches for any PrometheusRules with the `role=alert-rules`
-    # label.
-    role: alert-rules
+    app.kubernetes.io/name: resource-usage
+    app.kubernetes.io/environment: {{ .Values.environment }}
+    helm.sh/chart: {{ include "prometheus.chart" . }}
+{{ toYaml .Values.ruleSelectorLabels | indent 4 }}
 spec:
   groups:
   - name: resource-usage.rules

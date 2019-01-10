@@ -1,4 +1,7 @@
----
+# @TODO(mattjmcnaughton) I should be more specific about whether I want this
+# prometheus chart to be generic. If so, `rules-blog.yaml` shouldn't exist as a
+# template, rather it should be specified via values.yaml.
+#
 # This manifest defines the PrometheusRules specific to our blog that we'll use
 # for monitoring/alerting for mattjmcnaughton.com. Each rule should be
 # self-explanatory, but we utilize the following conventions:
@@ -10,10 +13,10 @@ kind: PrometheusRule
 metadata:
   name: blog
   labels:
-    app: blog
-    # Prometheus searches for any PrometheusRules with the `role=alert-rules`
-    # label.
-    role: alert-rules
+    app.kubernetes.io/name: blog
+    app.kubernetes.io/environment: {{ .Values.environment }}
+    helm.sh/chart: {{ include "prometheus.chart" . }}
+{{ toYaml .Values.ruleSelectorLabels | indent 4 }}
 spec:
   groups:
   - name: blog.rules
@@ -25,6 +28,8 @@ spec:
         # Make `for` more aggressive, because there's less chance of this
         # correcting itself.
         for: 5m
+        # @TODO(mattjmcnaugthon) Determine how I want to share label values with
+        # the `alertmanager` chart.
         labels:
           severity: critical
       - alert: SLOLatencyFailure

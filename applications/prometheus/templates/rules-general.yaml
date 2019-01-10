@@ -1,4 +1,3 @@
----
 # This manifest defines the PrometheusRules generic to our cluster that we'll use
 # to ensure our alerting/monitoring pipelines work as expected.
 #
@@ -8,9 +7,10 @@ kind: PrometheusRule
 metadata:
   name: general
   labels:
-    # Prometheus searches for any PrometheusRules with the `role=alert-rules`
-    # label.
-    role: alert-rules
+    app.kubernetes.io/name: general
+    app.kubernetes.io/environment: {{ .Values.environment }}
+    helm.sh/chart: {{ include "prometheus.chart" . }}
+{{ toYaml .Values.ruleSelectorLabels | indent 4 }}
 spec:
   groups:
   - name: general.rules
