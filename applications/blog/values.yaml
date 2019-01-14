@@ -2,7 +2,7 @@ replicaCount: 2
 
 image:
   repository: docker.io/mattjmcnaughton/blog
-  tag: 0b805208794fce961d21cc540290127df97742ed
+  tag: c7d6d1f2d79f22ecd1b3cc2f159bb38b6a5b0f2b
 
 resources:
   limits:
