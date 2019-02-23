@@ -13,6 +13,4 @@ resources:
     memory: 50Mi
 
 service:
-  productionType: LoadBalancer
-  developmentType: NodePort
   port: 80

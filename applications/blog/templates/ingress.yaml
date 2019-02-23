@@ -1,0 +1,28 @@
+# Template for ingress of service
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ include "blog.name" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "blog.name" . }}
+    app.kubernetes.io/environment: {{ .Values.environment }}
+    helm.sh/chart: {{ include "blog.chart" . }}
+  namespace: {{ .Values.namespace }}
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+    - host: mattjmcnaughton.com
+      http:
+        paths:
+        - path: /
+          backend:
+            serviceName: {{ include "blog.name" . }}
+            servicePort: 80
+    - host: blog.mattjmcnaughton.com
+      http:
+        paths:
+        - path: /
+          backend:
+            serviceName: {{ include "blog.name" . }}
+            servicePort: 80
