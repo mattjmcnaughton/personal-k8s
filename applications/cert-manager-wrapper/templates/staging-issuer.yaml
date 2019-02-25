@@ -1,0 +1,17 @@
+{{- if eq .Values.environment "production" }}
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Issuer
+metadata:
+  name: letsencrypt-staging
+  labels:
+    app.kubernetes.io/name: letsencrypt-staging
+    app.kubernetes.io/environment: {{ .Values.environment }}
+    helm.sh/chart: {{ include "cert-manager-wrapper.chart" . }}
+spec:
+  acme:
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    email: {{ .Values.registrationEmail }}
+    privateKeySecretRef:
+      name: letsencrypt-staging
+    http01: {}
+{{- end }}

@@ -1,0 +1,6 @@
+dependencies:
+  - name: cert-manager
+    version: v0.6.0
+    repository: "@stable"
+    condition: cert-manager.enabled
+

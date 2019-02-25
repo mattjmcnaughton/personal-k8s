@@ -5,3 +5,6 @@ namespace: default
 postgresql:
   persistence:
     enabled: false
+
+cert-manager:
+  enabled: false

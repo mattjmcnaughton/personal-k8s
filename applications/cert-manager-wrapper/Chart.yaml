@@ -1,0 +1,4 @@
+apiVersion: v1
+description: A wrapper around the cert-manager.
+name: cert-manager-wrapper
+version: 0.0.1

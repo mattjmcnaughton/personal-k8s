@@ -1,0 +1,18 @@
+registrationEmail: mattjmcnaughton@gmail.com
+
+cert-manager:
+  nameOverride: cert-manager
+  fullnameOverride: cert-manager
+
+  resources:
+    limits:
+      cpu: 200m
+      memory: 100Mi
+    requests:
+      cpu: 200m
+      memory: 100Mi
+
+  tolerations:
+  - key: "type"
+    operator: "Equal"
+    value: "spot-instance"
