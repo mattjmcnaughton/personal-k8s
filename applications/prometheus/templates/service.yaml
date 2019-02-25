@@ -11,11 +11,6 @@ metadata:
     helm.sh/chart: {{ include "prometheus.chart" . }}
   namespace: {{ .Values.namespace }}
 spec:
-  {{- if eq .Values.environment "production" }}
-  type: {{ .Values.service.productionType }}
-  {{- else }}
-  type: {{ .Values.service.developmentType }}
-  {{- end }}
   ports:
   - name: web
     port: 9090

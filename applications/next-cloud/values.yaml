@@ -33,8 +33,9 @@ initScripts:
 
     su -s /bin/bash -c "export OC_PASS=$NEXTCLOUD_PERSONAL_PASSWORD; php occ user:add --password-from-env --group='admin' $NEXTCLOUD_PERSONAL_USER" www-data
 
+    su -s /bin/bash -c "php occ config:system:set trusted_domains 2 --value=nextcloud.mattjmcnaughton.com" www-data
+
 service:
-  type: NodePort
   port: 80
 
 postgresql:

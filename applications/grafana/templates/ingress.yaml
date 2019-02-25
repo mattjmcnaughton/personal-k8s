@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ include "grafana.name" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "grafana.name" . }}
+    app.kubernetes.io/environment: {{ .Values.environment }}
+    helm.sh/chart: {{ include "grafana.chart" . }}
+  namespace: {{ .Values.namespace }}
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    {{- if eq .Values.environment "production" }}
+    certmanager.k8s.io/issuer: "letsencrypt-prod"
+    certmanager.k8s.io/acme-challenge-type: http01
+    {{- end }}
+spec:
+  tls:
+  - hosts:
+    - grafana.mattjmcnaughton.com
+    secretName: grafana-tls
+  rules:
+    - host: grafana.mattjmcnaughton.com
+      http:
+        paths:
+        - path: /
+          backend:
+            serviceName: {{ include "grafana.name" . }}
+            servicePort: {{ .Values.service.port }}

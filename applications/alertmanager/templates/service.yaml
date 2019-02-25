@@ -9,11 +9,6 @@ metadata:
     helm.sh/chart: {{ include "alertmanager.chart" . }}
   namespace: {{ .Values.namespace }}
 spec:
-  {{- if eq .Values.environment "production" }}
-  type: {{ .Values.service.productionType }}
-  {{- else }}
-  type: {{ .Values.service.developmentType }}
-  {{- end }}
   ports:
     - port: {{ .Values.service.port }}
       targetPort: web
