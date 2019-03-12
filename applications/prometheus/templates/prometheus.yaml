@@ -10,6 +10,7 @@ metadata:
     app.kubernetes.io/environment: {{ .Values.environment }}
     helm.sh/chart: {{ include "prometheus.chart" . }}
 spec:
+  tag: {{ .Values.image.tag }}
   # Under the hood, the Prometheus Operator creates a stateful set. So we will have `#replicas`
   # pods in our stateful set.
   replicas: {{ .Values.replicaCount }}

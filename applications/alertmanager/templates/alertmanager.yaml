@@ -18,6 +18,7 @@ spec:
   # Our Alertmanager should have at least two replicas so that its high
   # availability.
   replicas: {{ .Values.replicaCount }}
+  tag: {{ .Values.image.tag }}
   serviceAccountName: {{ include "alertmanager.name" . }}
   resources:
 {{ toYaml .Values.resources | indent 4 }}

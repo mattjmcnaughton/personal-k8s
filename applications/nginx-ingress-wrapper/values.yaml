@@ -1,3 +1,11 @@
 nginx-ingress:
   nameOverride: nginx-ingress
   fullnameOverride: nginx-ingress
+
+  controller:
+    image:
+      tag: 0.22.0
+
+  defaultBackend:
+    image:
+      tag: 1.4

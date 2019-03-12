@@ -1,5 +1,8 @@
 replicaCount: 1
 
+image:
+  tag: v2.7.1
+
 # Retain data for 90 days. Note, we may need to decrease these if we find it
 # requires too much storage.
 retention: "90d"

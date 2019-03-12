@@ -4,6 +4,9 @@ cert-manager:
   nameOverride: cert-manager
   fullnameOverride: cert-manager
 
+  image:
+    tag: v0.6.2
+
   resources:
     limits:
       cpu: 200m
