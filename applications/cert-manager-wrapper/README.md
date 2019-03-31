@@ -8,7 +8,8 @@ Applying namespaces to this will require some thought.
 
 ### Chart dependencies
 
-If you update the `requirements.txt`, you must run `helm dep update`.
+If you update the `requirements.txt`, you must run `helm repo add jetstack
+https://charts.jetstack.io && helm dep update`.
 
 ### Before installing helm chart
 
@@ -17,7 +18,7 @@ Before installing, we must do the following:
 ```
 ## IMPORTANT: you MUST install the cert-manager CRDs **before** installing the
 ## cert-manager Helm chart
-$ kubectl apply -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.6/deploy/manifests/00-crds.yaml
+$ kubectl apply -f https://raw.githubusercontent.com/jetstack/cert-manager/release-0.7/deploy/manifests/00-crds.yaml
 
 ## IMPORTANT: if you are deploying into a namespace that **already exists**,
 ## you MUST ensure the namespace has an additional label on it in order for

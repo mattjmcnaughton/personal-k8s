@@ -1,6 +1,6 @@
 dependencies:
   - name: cert-manager
-    version: v0.6.0
-    repository: "@stable"
+    version: v0.7.0
+    repository: "@jetstack"
     condition: cert-manager.enabled
 

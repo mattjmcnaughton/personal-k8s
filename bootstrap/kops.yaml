@@ -1,7 +1,7 @@
 apiVersion: kops/v1alpha2
 kind: Cluster
 metadata:
-  creationTimestamp: 2018-09-03T18:56:22Z
+  creationTimestamp: 2019-03-31T02:18:39Z
   name: k8s.mattjmcnaughton.com
 spec:
   api:
@@ -12,13 +12,17 @@ spec:
   cloudProvider: aws
   configBase: s3://mattjmcnaughton-kops-state-store/k8s.mattjmcnaughton.com
   etcdClusters:
-  - etcdMembers:
+  - cpuRequest: 200m
+    etcdMembers:
     - instanceGroup: master-us-west-2a
       name: a
+    memoryRequest: 100Mi
     name: main
-  - etcdMembers:
+  - cpuRequest: 100m
+    etcdMembers:
     - instanceGroup: master-us-west-2a
       name: a
+    memoryRequest: 100Mi
     name: events
   iam:
     allowContainerRegistry: true
@@ -28,7 +32,6 @@ spec:
   kubernetesApiAccess:
   - 0.0.0.0/0
   kubernetesVersion: 1.12.7
-  masterInternalName: api.internal.k8s.mattjmcnaughton.com
   masterPublicName: api.k8s.mattjmcnaughton.com
   networkCIDR: 172.20.0.0/16
   networking:
@@ -52,12 +55,12 @@ spec:
 apiVersion: kops/v1alpha2
 kind: InstanceGroup
 metadata:
-  creationTimestamp: 2018-09-03T18:56:22Z
+  creationTimestamp: 2019-03-31T02:18:39Z
   labels:
     kops.k8s.io/cluster: k8s.mattjmcnaughton.com
   name: master-us-west-2a
 spec:
-  image: kope.io/k8s-1.9-debian-jessie-amd64-hvm-ebs-2018-03-11
+  image: kope.io/k8s-1.11-debian-stretch-amd64-hvm-ebs-2018-08-17
   machineType: m3.medium
   maxSize: 1
   minSize: 1
@@ -80,12 +83,12 @@ spec:
 apiVersion: kops/v1alpha2
 kind: InstanceGroup
 metadata:
-  creationTimestamp: 2018-09-03T18:56:22Z
+  creationTimestamp: 2019-03-31T02:18:40Z
   labels:
     kops.k8s.io/cluster: k8s.mattjmcnaughton.com
   name: nodes
 spec:
-  image: kope.io/k8s-1.9-debian-jessie-amd64-hvm-ebs-2018-03-11
+  image: kope.io/k8s-1.11-debian-stretch-amd64-hvm-ebs-2018-08-17
   machineType: t2.medium
   maxSize: 1
   minSize: 1
@@ -99,18 +102,15 @@ spec:
 
 ---
 
-# `nodes-spot-instances` is node machines backed by spot instances. We should
-# not run high availability nodes on these applications, and we ensure we don't
-# by adding a taint to the node which non-ha applications must tolerate.
 apiVersion: kops/v1alpha2
 kind: InstanceGroup
 metadata:
-  creationTimestamp: 2018-09-03T18:56:23Z
+  creationTimestamp: 2019-03-31T02:18:40Z
   labels:
     kops.k8s.io/cluster: k8s.mattjmcnaughton.com
   name: nodes-spot-instances
 spec:
-  image: kope.io/k8s-1.9-debian-jessie-amd64-hvm-ebs-2018-03-11
+  image: kope.io/k8s-1.11-debian-stretch-amd64-hvm-ebs-2018-08-17
   machineType: t2.medium
   maxPrice: ".0464"
   maxSize: 2
