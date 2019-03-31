@@ -102,6 +102,11 @@ spec:
 
 ---
 
+# `nodes-spot-instances` is spot instance nodes, which are cheaper, but not as
+# reliable.
+#
+# We apply a taint to them, which applications much tolerate if they don't need
+# HA.
 apiVersion: kops/v1alpha2
 kind: InstanceGroup
 metadata:
