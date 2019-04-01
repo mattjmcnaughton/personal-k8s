@@ -4,7 +4,9 @@ image:
   repository: docker.io/grafana/grafana
   # Need to use `grafana>=5.x` so that we can provision dashboards and
   # datasources via configuration files.
-  tag: 5.3.2
+  #
+  # Avoid migrating to grafana 6.x until necessary.
+  tag: 5.4.3
 
 resources:
   limits:

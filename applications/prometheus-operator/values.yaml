@@ -7,8 +7,11 @@ args:
 image:
   repository: quay.io/coreos/prometheus-operator
   # We know that certain PrometheusRule operations fail with 0.17 and
-  # succeed with 0.24, so use at least 0.24.
-  tag: v0.24.0
+  # succeed with 0.24, so use at least 0.24. If we use greater than 0.26.0, we
+  # run into permission issues.
+  #
+  # https://github.com/rancher/rancher/issues/17256#issuecomment-451396415
+  tag: v0.25.0
 
 resources:
   limits:
