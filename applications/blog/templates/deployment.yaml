@@ -28,5 +28,17 @@ spec:
         - name: http
           containerPort: 80
           protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /metrics
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /metrics
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 10
         resources:
 {{ toYaml .Values.resources | indent 10 }}
