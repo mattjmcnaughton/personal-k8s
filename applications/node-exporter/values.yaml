@@ -11,11 +11,11 @@ nodeExporterImage:
 
 nodeExporterResources:
   limits:
-    cpu: 102m
-    memory: 180Mi
+    cpu: 50m
+    memory: 90Mi
   requests:
-    cpu: 102m
-    memory: 180Mi
+    cpu: 50m
+    memory: 90Mi
 
 kubeRbacProxyArgs:
   - --secure-listen-address=$(IP):9100

@@ -5,11 +5,11 @@ image:
 
 resources:
   limits:
-   cpu: 100m
-   memory: 100Mi
+   cpu: 50m
+   memory: 50Mi
   requests:
-   cpu: 100m
-   memory: 100Mi
+   cpu: 50m
+   memory: 50Mi
 
 service:
   port: 9093

@@ -10,11 +10,11 @@ image:
 
 resources:
   limits:
-    cpu: 100m
-    memory: 100Mi
+    cpu: 50m
+    memory: 50Mi
   requests:
-    cpu: 100m
-    memory: 100Mi
+    cpu: 50m
+    memory: 50Mi
 
 # Allow Grafana to run on spot instances because we do not care if its high
 # availaibility.
