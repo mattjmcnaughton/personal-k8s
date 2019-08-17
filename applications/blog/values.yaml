@@ -9,8 +9,8 @@ resources:
     cpu: 100m
     memory: 50Mi
   requests:
-    cpu: 100m
-    memory: 50Mi
+    cpu: 50m
+    memory: 25Mi
 
 service:
   port: 80
