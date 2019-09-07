@@ -31,7 +31,7 @@ spec:
     anonymousAuth: false
   kubernetesApiAccess:
   - 0.0.0.0/0
-  kubernetesVersion: 1.13.9
+  kubernetesVersion: 1.14.6
   masterPublicName: api.k8s.mattjmcnaughton.com
   networkCIDR: 172.20.0.0/16
   networking:
