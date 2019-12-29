@@ -1,4 +1,16 @@
-# personal-k8s
+# [DEPRECATED] personal-k8s
+
+## STATUS
+
+As of 12/19/2019, I've torn down this k8s cluster. I am now serving my blog via
+my most recent self-hosting project, [nuage](https://github.com/mattjmcnaughton/nuage).
+Eventually, I will likely host my own k8s cluster on `nuage`, but I will built
+the cluster via `kubeadm`, instead of `kops`.
+
+All cluster resources have been deleted via `kops` and all of the terraform
+resources have been destroyed.
+
+## Description
 
 All the code for bootstrapping, managing, and deploying applications on my
 personal k8s cluster.
